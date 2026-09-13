@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kinomonster</title>
+
+    <link rel = "stylesheet" href = "main.css">
+    <link rel = "stylesheet" href = "header.css">
+    <link rel = "stylesheet" href = "footer.css">
+
+    <script src="main.js" defer></script>
+</head>
+<body>
+<header>
+  <nav class="header-nav nav-desktop">
+    <div class="header-nav-elems default-container">
+      <ul>
+        <li>
+          <a href="#" class="logo">
+            <img
+              src="photos/logo_kinomonster.svg"
+              alt="logo"
+            /> <!--Удалил путь-->
+          </a>
+        </li>
+      </ul>
+      <ul class="second-menu">
+        <li><a href="#">LIVE TV</a></li>
+        <li><a href="#">MOVIES</a></li>
+        <li><a href="#">SHOWS</a></li>
+        <li><a href="login.html">LOG IN</a></li>
+        <li><a href="register.html">REGISTER</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <nav class="nav-mobile">
+    <div class="header-nav-elems-mobile">
+      <ul>
+        <li class="mobile-btn">
+          <img src="photos/menuicon.svg" alt="menu" (click)="toggleMenu()" /> <!--Удалил assets-->
+        </li>
+        <li>
+          <a href="#" class="logo">
+            <img src="photos/logo_kinomonster.svg" alt="logo" /> <!--Удалил img-->
+          </a>
+        </li>
+      </ul>
+      <ul
+        class="second-menu-mobile"
+        [style.display]="isMenuOpen ? 'block' : 'none'"
+      >
+        <li><a href="#">LIVE TV</a></li>
+        <li><a href="#">MOVIES</a></li>
+        <li><a href="#">SHOWS</a></li>
+        <li><a href="login.html">LOG IN</a></li>
+        <li><a href="register.html">REGISTER</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+<main id = "heroSection">
+  <section>
+    <ul class="hero">
+      <li>
+        <img
+          class="main-slider-img"
+          src="photos/fight-club-hero.jpg"
+          alt="img"
+        />
+        <div class="default-container">
+          <div class="hero-movie">
+            <p>Fight Club</p>
+            <p>
+              Discontented with his capitalistic lifestyle, a white-collared
+              insomniac forms an underground fight club with Tyler
+            </p>
+            <button>WATCH NOW</button>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <img
+          class="main-slider-img"
+          src="photos/joker.jpg"
+          alt="img"
+        />
+        <div class="default-container">
+          <div class="hero-movie">
+            <p>Joker</p>
+            <p>
+              Discontented with his capitalistic lifestyle, a white-collared
+              insomniac forms an underground fight club with Tyler
+            </p>
+            <button (click)="goToMovie()">WATCH NOW</button>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <img
+          class="main-slider-img"
+          src="photos/no-country-for-old-men.jpg"
+          alt="img"
+        />
+        <div class="default-container">
+          <div class="hero-movie">
+            <p>No Country For Old Men</p>
+            <p>
+              Discontented with his capitalistic lifestyle, a white-collared
+              insomniac forms an underground fight club with Tyler
+            </p>
+            <button>WATCH NOW</button>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <img
+          class="main-slider-img"
+          src="photos/bladerunner.jpg"
+          alt="img"
+        /> <!--Убрал assets-->
+        <div class="default-container">
+          <div class="hero-movie">
+            <p>Blade Runner</p>
+            <p>
+              Discontented with his capitalistic lifestyle, a white-collared
+              insomniac forms an underground fight club with Tyler
+            </p>
+            <button>WATCH NOW</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="default-container">
+      <div class="next-main-slider-dots">
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <div class="fader-bg">
+      <div class="fader-gradient-0"></div>
+      <div class="fader-gradient-1"></div>
+    </div>
+  </section>
+
+  <section class="default-container">
+    <p class="lbl-p">On now</p>
+    <div class="posters-now">
+      <div class="poster-now">
+        <img src="photos/live-with-kelly_poster.jpg" alt="poster-now" />
+        <div class="poster-now-lbls">
+          <p>S5 E2</p>
+          <p>Live with Kelly and Ryan</p>
+        </div>
+      </div>
+
+      <div class="poster-now">
+        <img src="photos/bbt_poster.jpg" alt="poster-now" />
+        <div class="poster-now-lbls">
+          <p>S12 E2</p>
+          <p>The Big Bang Theory</p>
+        </div>
+      </div>
+
+      <div class="poster-now">
+        <img src="photos/s-park_poster.jpg" alt="poster-now" />
+        <div class="poster-now-lbls">
+          <p>S95 E2</p>
+          <p>South Park</p>
+        </div>
+      </div>
+
+      <div class="poster-now">
+        <img
+          src="photos/stranger-things-s-3_poster.jpg"
+          alt="poster-now"
+        />
+        <div class="poster-now-lbls">
+          <p>S8 E6</p>
+          <p>Stranger Things</p>
+        </div>
+      </div>
+
+      <div class="poster-now">
+        <img src="photos/fclub_poster.jpg" alt="poster-now" />
+        <div class="poster-now-lbls">
+          <p>MOVIE</p>
+          <p>Fight Club</p>
+        </div>
+      </div>
+
+      <div class="poster-now">
+        <img src="photos/stands_poster.jpg" alt="poster-now" />
+        <div class="poster-now-lbls">
+          <p>S1 E3</p>
+          <p>The Stand</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="default-container">
+    <p class="lbl-p">Popular Shows And Movies</p>
+    <div class="posters">
+      <div class="poster">
+        <img src="photos/stranger-things_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/friends_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/mand_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/free-guy_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <a href="movie.html"
+          ><img src="photos/joker_poster.jpg" alt=""
+        /></a>
+      </div>
+      <div class="poster">
+        <img src="photos/chernobyl_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/space-sweepers_poster.jpg" alt="" />
+      </div>
+    </div>
+  </section>
+
+  <section class="default-container">
+    <p class="lbl-p">Recently Added Shows</p>
+    <div class="posters">
+      <div class="poster">
+        <img src="photos/shimmer_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/bridgerton_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/queens-gambit_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/dark_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/lucifer_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/shameless_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/the-undoing_poster.jpg" alt="" />
+      </div>
+    </div>
+  </section>
+
+  <section class="default-container">
+    <p class="lbl-p">Recently Added Movies</p>
+    <div class="posters">
+      <div class="poster">
+        <img src="photos/the-trial-of-chicago_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/the-wolf-of-wall-street_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/ww-84_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/fight-club_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/harry-potter_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/holidate_poster.jpg" alt="" />
+      </div>
+      <div class="poster">
+        <img src="photos/death-on-the-nile_poster.jpg" alt="" />
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Main links</h4>
+        <a routerLink="/movies">Movies</a>
+        <a routerLink="/shows">Shows</a>
+        <a routerLink="/live-tv">Live TV</a>
+      </div>
+      <div class="footer-section">
+        <h4>Other links</h4>
+        <a routerLink="/about">About US</a>
+      </div>
+      <div class="footer-section">
+        <h4>KinoMonster</h4>
+        <a routerLink="/courses">Our Courses</a>
+      </div>
+    </div>
+  
+    <div class="social-media">
+      <span>Follow us via social media:</span>
+      <div class="icons">
+        <a href="#"><img src="photos/youtube.svg" alt="YouTube"></a>
+        <a href="#"><img src="photos/facebook.svg" alt="Facebook"></a>
+        <a href="#"><img src="photos/instagramm.svg" alt="Instagram"></a>
+        <a href="#"><img src="photos/vk.svg" alt="VK"></a>
+        <a href="#"><img src="photos/telegramm.svg" alt="Telegram"></a> <!--Убрал assets. Все фото перекинул в public-->
+      </div>
+    </div>
+  
+    <div class="footer-bottom">
+      <p>© KinoMonster.com All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

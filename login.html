@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Log In — KinoMonster</title>
+
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="header.css">
+  <link rel="stylesheet" href="footer.css">
+  <script src="main.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <nav class="header-nav nav-desktop">
+      <div class="header-nav-elems default-container">
+        <ul>
+          <li>
+            <a href="project.html" class="logo">
+              <img src="photos/logo_kinomonster.svg" alt="KinoMonster">
+            </a>
+          </li>
+        </ul>
+        <ul class="second-menu">
+          <li><a href="project.html">LIVE TV</a></li>
+          <li><a href="project.html">MOVIES</a></li>
+          <li><a href="project.html">SHOWS</a></li>
+          <li><a href="login.html">LOG IN</a></li>
+          <li><a href="register.html">REGISTER</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <nav class="nav-mobile">
+      <div class="header-nav-elems-mobile">
+        <ul>
+          <li class="mobile-btn">
+            <img src="photos/menuicon.svg" alt="Menu">
+          </li>
+          <li>
+            <a href="project.html" class="logo">
+              <img src="photos/logo_kinomonster.svg" alt="KinoMonster">
+            </a>
+          </li>
+        </ul>
+        <ul class="second-menu-mobile">
+          <li><a href="project.html">LIVE TV</a></li>
+          <li><a href="project.html">MOVIES</a></li>
+          <li><a href="project.html">SHOWS</a></li>
+          <li><a href="login.html">LOG IN</a></li>
+          <li><a href="register.html">REGISTER</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="login">
+      <div class="form-container">
+        <p>Log In</p>
+
+        <form id="loginForm">
+          <label for="loginEmail">Email</label>
+          <input
+            id="loginEmail"
+            type="email"
+            name="email"
+            required
+          >
+
+          <label for="loginPassword">Password</label>
+          <input
+            id="loginPassword"
+            type="password"
+            name="password"
+            required
+          >
+
+          <input type="submit" value="Log In">
+        </form>
+
+        <p>or <span>Forgot Password</span></p>
+      </div>
+
+      <p>
+        No account?
+        <a href="register.html">Register</a>
+      </p>
+    </section>
+  </main>
+
+ <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Main links</h4>
+        <a routerLink="/movies">Movies</a>
+        <a routerLink="/shows">Shows</a>
+        <a routerLink="/live-tv">Live TV</a>
+      </div>
+      <div class="footer-section">
+        <h4>Other links</h4>
+        <a routerLink="/about">About US</a>
+      </div>
+      <div class="footer-section">
+        <h4>KinoMonster</h4>
+        <a routerLink="/courses">Our Courses</a>
+      </div>
+    </div>
+  
+    <div class="social-media">
+      <span>Follow us via social media:</span>
+      <div class="icons">
+        <a href="#"><img src="photos/youtube.svg" alt="YouTube"></a>
+        <a href="#"><img src="photos/facebook.svg" alt="Facebook"></a>
+        <a href="#"><img src="photos/instagramm.svg" alt="Instagram"></a>
+        <a href="#"><img src="photos/vk.svg" alt="VK"></a>
+        <a href="#"><img src="photos/telegramm.svg" alt="Telegram"></a> <!--Убрал assets. Все фото перекинул в public-->
+      </div>
+    </div>
+  
+    <div class="footer-bottom">
+      <p>© KinoMonster.com All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
