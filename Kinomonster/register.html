@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/footer.css">
   <script src="js/main.js" defer></script>
+  <script src="js/formValidation.js" defer></script>
 </head>
 
 <body>
@@ -62,6 +63,22 @@
       <p>Register</p>
 
       <form id="registerForm">
+        <label for="registerFirstName">First Name</label>
+        <input
+          id="registerFirstName"
+          type="FirstName"
+          name="FirstName"
+          required
+        >
+
+        <label for="registerLastName">Last Name</label>
+        <input
+          id="registerLastName"
+          type="LastName"
+          name="LastName"
+          required
+        >
+
         <label for="registerEmail">Email</label>
         <input
           id="registerEmail"
@@ -75,6 +92,7 @@
           id="registerPassword"
           type="password"
           name="password"
+          minlength="8"
           required
         >
 
@@ -83,6 +101,7 @@
           id="repeatPassword"
           type="password"
           name="repeatPassword"
+          minlength="8"
           required
         >
 
