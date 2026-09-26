@@ -78,3 +78,29 @@ if (menuButton && submenu) {
     submenu.style.display = isOpen ? "none" : "block";
   });
 }
+
+const bookingForm = document.querySelector(".booking-panel form");
+
+if (bookingForm) {
+  const sessionSelect = bookingForm.querySelector("select[name='session']");
+  const seatLabels = bookingForm.querySelectorAll(".seat-grid label[data-seat]");
+
+  function updateSeats() {
+    const booked = (sessionSelect.selectedOptions[0].dataset.booked || "")
+      .split(",")
+      .filter(Boolean);
+
+    seatLabels.forEach((label) => {
+      const input = label.querySelector("input");
+      const occupied = booked.includes(label.dataset.seat);
+      label.classList.toggle("occupied", occupied);
+      input.disabled = occupied;
+      if (occupied) {
+        input.checked = false;
+      }
+    });
+  }
+
+  sessionSelect.addEventListener("change", updateSeats);
+  updateSeats();
+}
