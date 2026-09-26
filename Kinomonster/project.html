@@ -24,9 +24,8 @@
         </li>
       </ul>
       <ul class="second-menu">
-        <li><a href="#">LIVE TV</a></li>
-        <li><a href="#">MOVIES</a></li>
-        <li><a href="#">SHOWS</a></li>
+        <li><a href="pages/search.php">MOVIES</a></li>
+        <li><a href="pages/search.php">SEARCH</a></li>
         <li><a href="login.html">LOG IN</a></li>
         <li><a href="register.html">REGISTER</a></li>
       </ul>
@@ -49,9 +48,8 @@
         class="second-menu-mobile"
         [style.display]="isMenuOpen ? 'block' : 'none'"
       >
-        <li><a href="#">LIVE TV</a></li>
-        <li><a href="#">MOVIES</a></li>
-        <li><a href="#">SHOWS</a></li>
+        <li><a href="pages/search.php">MOVIES</a></li>
+        <li><a href="pages/search.php">SEARCH</a></li>
         <li><a href="login.html">LOG IN</a></li>
         <li><a href="register.html">REGISTER</a></li>
       </ul>
@@ -74,7 +72,7 @@
               Discontented with his capitalistic lifestyle, a white-collared
               insomniac forms an underground fight club with Tyler
             </p>
-            <button>WATCH NOW</button>
+            <a class="hero-button" href="pages/movie.php?id=fight-club">WATCH NOW</a>
           </div>
         </div>
       </li>
@@ -92,7 +90,7 @@
               Discontented with his capitalistic lifestyle, a white-collared
               insomniac forms an underground fight club with Tyler
             </p>
-            <button (click)="goToMovie()">WATCH NOW</button>
+            <a class="hero-button" href="pages/movie.php?id=joker">WATCH NOW</a>
           </div>
         </div>
       </li>
@@ -110,7 +108,7 @@
               Discontented with his capitalistic lifestyle, a white-collared
               insomniac forms an underground fight club with Tyler
             </p>
-            <button>WATCH NOW</button>
+            <a class="hero-button" href="pages/movie.php?id=no-country-for-old-men">WATCH NOW</a>
           </div>
         </div>
       </li>
@@ -128,7 +126,7 @@
               Discontented with his capitalistic lifestyle, a white-collared
               insomniac forms an underground fight club with Tyler
             </p>
-            <button>WATCH NOW</button>
+            <a class="hero-button" href="pages/movie.php?id=blade-runner">WATCH NOW</a>
           </div>
         </div>
       </li>
@@ -147,6 +145,15 @@
       <div class="fader-gradient-0"></div>
       <div class="fader-gradient-1"></div>
     </div>
+  </section>
+
+  <section class="default-container movie-search">
+    <p class="lbl-p">Find a movie</p>
+    <form action="pages/search.php" method="get">
+      <label for="home-search">Movie title</label>
+      <input id="home-search" type="search" name="q" placeholder="Search by title" required>
+      <button type="submit">SEARCH</button>
+    </form>
   </section>
 
   <section class="default-container">
@@ -221,7 +228,7 @@
         <img src="photos/free-guy_poster.jpg" alt="" />
       </div>
       <div class="poster">
-        <a href="movie.html"
+        <a href="pages/movie.php?id=joker"
           ><img src="photos/joker_poster.jpg" alt=""
         /></a>
       </div>

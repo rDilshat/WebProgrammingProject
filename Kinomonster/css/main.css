@@ -582,3 +582,192 @@ nav.nav-mobile {
 input[aria-invalid="true"] {
   box-shadow: inset 0 0 0 1px #ff4d4d;
 }
+
+.hero-button,
+.text-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff501a;
+  color: white;
+  min-height: 42px;
+  padding: 0 18px;
+  transition: background-color 200ms;
+}
+
+.hero-button:hover,
+.text-button:hover,
+button:hover {
+  background-color: #d93f12;
+}
+
+.movie-search,
+.flow-page {
+  padding-bottom: 40px;
+}
+
+.movie-search form,
+.booking-panel form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.movie-search label,
+.booking-panel label,
+.booking-panel legend {
+  color: #a3a3a3;
+}
+
+.movie-search input,
+.booking-panel select,
+.booking-panel input[type="date"] {
+  height: 42px;
+  padding: 0 12px;
+  background-color: #404040;
+  color: white;
+  border: 0;
+}
+
+.movie-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 22px;
+}
+
+.movie-card img {
+  display: block;
+  height: 310px;
+  object-fit: cover;
+}
+
+.movie-card h2 {
+  margin-top: 10px;
+  font-size: 22px;
+}
+
+.movie-card p,
+.movie-details p,
+.confirmation p {
+  color: #b8b8b8;
+  margin: 8px 0 14px;
+}
+
+.movie-card .text-button {
+  margin-top: 8px;
+}
+
+.empty-state,
+.confirmation,
+.booking-panel {
+  margin-top: 42px;
+  padding: 28px;
+  background-color: #161515;
+}
+
+.movie-details {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.movie-details img {
+  height: auto;
+  object-fit: cover;
+}
+
+.movie-details h1,
+.confirmation h1 {
+  font-size: 42px;
+  margin: 12px 0;
+}
+
+.success-icon {
+  color: #65c466;
+  font-size: 48px;
+  line-height: 1;
+}
+
+.success-label {
+  color: #65c466 !important;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.booking-summary {
+  max-width: 440px;
+  margin: 24px auto;
+  text-align: left;
+  border-top: 1px solid #404040;
+}
+
+.booking-summary p {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #404040;
+  padding: 12px 0;
+  margin: 0;
+}
+
+.booking-summary span {
+  color: #888;
+}
+
+.movie-meta {
+  color: #ff501a !important;
+}
+
+.booking-panel fieldset {
+  width: 100%;
+  border: 0;
+  margin: 22px 0;
+}
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 42px);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.seat-grid input {
+  position: absolute;
+  opacity: 0;
+}
+
+.seat-grid span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  background-color: #404040;
+  cursor: pointer;
+}
+
+.seat-grid input:checked + span {
+  background-color: #ff501a;
+}
+
+.seat-grid .occupied span {
+  background-color: #171717;
+  color: #6a6a6a;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .movie-details {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-details h1,
+  .confirmation h1 {
+    font-size: 32px;
+  }
+
+  .seat-grid {
+    grid-template-columns: repeat(6, 42px);
+  }
+}
