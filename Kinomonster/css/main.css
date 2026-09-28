@@ -84,19 +84,43 @@ ul.second-menu > li:nth-last-child(2) {
   margin-left: 100px;
 }
 
-ul.second-menu > li:first-child > a {
-  margin-right: 10px;
+/* Navigation: hover and current page */
+ul.second-menu a,
+ul.second-menu-mobile a {
+  transition: color 0.2s, border-color 0.2s;
 }
 
-ul.second-menu > li:first-child > a::after {
+ul.second-menu a:hover,
+ul.second-menu-mobile a:hover {
+  color: #f44336;
+}
+
+ul.second-menu > li:last-child > a:hover {
+  border-color: #f44336;
+}
+
+ul.second-menu > li > a.active {
+  position: relative;
+}
+
+ul.second-menu > li > a.active::after {
   content: "";
   position: absolute;
   width: 7px;
   height: 7px;
   background-color: #ff3c00;
   border-radius: 50%;
-  left: 64px;
-  top: 14px;
+  right: -12px;
+  top: 0;
+}
+
+ul.second-menu > li:last-child > a.active::after {
+  right: -4px;
+  top: -4px;
+}
+
+ul.second-menu-mobile a.active {
+  color: #ff3c00;
 }
 
 .main-slider-img {

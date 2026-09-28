@@ -15,7 +15,7 @@
 
 <body>
 <header>
-  <nav class="header-nav nav-desktop">
+  <nav class="header-nav nav-desktop" aria-label="Main navigation">
     <div class="header-nav-elems default-container">
       <ul>
         <li>
@@ -25,16 +25,15 @@
         </li>
       </ul>
       <ul class="second-menu">
-        <li><a href="project.html">LIVE TV</a></li>
-        <li><a href="project.html">MOVIES</a></li>
-        <li><a href="project.html">SHOWS</a></li>
+        <li><a href="project.html">HOME</a></li>
+        <li><a href="pages/search.php">MOVIES</a></li>
         <li><a href="login.html">LOG IN</a></li>
-        <li><a href="register.html">REGISTER</a></li>
+        <li><a href="register.html" class="active" aria-current="page">REGISTER</a></li>
       </ul>
     </div>
   </nav>
 
-  <nav class="nav-mobile">
+  <nav class="nav-mobile" aria-label="Mobile navigation">
     <div class="header-nav-elems-mobile">
       <ul>
         <li class="mobile-btn">
@@ -47,11 +46,10 @@
         </li>
       </ul>
       <ul class="second-menu-mobile">
-        <li><a href="project.html">LIVE TV</a></li>
-        <li><a href="project.html">MOVIES</a></li>
-        <li><a href="project.html">SHOWS</a></li>
+        <li><a href="project.html">HOME</a></li>
+        <li><a href="pages/search.php">MOVIES</a></li>
         <li><a href="login.html">LOG IN</a></li>
-        <li><a href="register.html">REGISTER</a></li>
+        <li><a href="register.html" class="active" aria-current="page">REGISTER</a></li>
       </ul>
     </div>
   </nav>
@@ -114,31 +112,27 @@
 </main>
 
 <footer class="footer">
-  <div class="footer-content">
-    <div class="footer-section">
-      <h4>Main links</h4>
-      <a href="#">Movies</a>
-      <a href="#">Shows</a>
-      <a href="#">Live TV</a>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Main links</h4>
+        <a href="project.html">Home</a>
+        <a href="pages/search.php">Movies</a>
+      </div>
+      <div class="footer-section">
+        <h4>Account</h4>
+        <a href="login.html">Log In</a>
+        <a href="register.html">Register</a>
+      </div>
     </div>
-    <div class="footer-section">
-      <h4>Other links</h4>
-      <a href="#">About US</a>
-    </div>
-    <div class="footer-section">
-      <h4>KinoMonster</h4>
-      <a href="#">Our Courses</a>
-    </div>
-  </div>
 
   <div class="social-media">
     <span>Follow us via social media:</span>
     <div class="icons">
-      <a href="#"><img src="photos/youtube.svg" alt="YouTube"></a>
-      <a href="#"><img src="photos/facebook.svg" alt="Facebook"></a>
-      <a href="#"><img src="photos/instagramm.svg" alt="Instagram"></a>
-      <a href="#"><img src="photos/vk.svg" alt="VK"></a>
-      <a href="#"><img src="photos/telegramm.svg" alt="Telegram"></a>
+      <a href="https://www.youtube.com" target="_blank" rel="noopener"><img src="photos/youtube.svg" alt="YouTube"></a>
+      <a href="https://www.facebook.com" target="_blank" rel="noopener"><img src="photos/facebook.svg" alt="Facebook"></a>
+      <a href="https://www.instagram.com" target="_blank" rel="noopener"><img src="photos/instagramm.svg" alt="Instagram"></a>
+      <a href="https://vk.com" target="_blank" rel="noopener"><img src="photos/vk.svg" alt="VK"></a>
+      <a href="https://telegram.org" target="_blank" rel="noopener"><img src="photos/telegramm.svg" alt="Telegram"></a>
     </div>
   </div>
 
