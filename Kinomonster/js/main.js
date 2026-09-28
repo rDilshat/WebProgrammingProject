@@ -84,6 +84,12 @@ const bookingForm = document.querySelector(".booking-panel form");
 if (bookingForm) {
   const sessionSelect = bookingForm.querySelector("select[name='session']");
   const seatLabels = bookingForm.querySelectorAll(".seat-grid label[data-seat]");
+  const loginLink = document.querySelector("a[href$='login.html']");
+  const registerLink = document.querySelector("a[href$='register.html']");
+
+  function isVisible(element) {
+    return element && element.offsetParent !== null;
+  }
 
   function updateSeats() {
     const booked = (sessionSelect.selectedOptions[0].dataset.booked || "")
@@ -103,4 +109,11 @@ if (bookingForm) {
 
   sessionSelect.addEventListener("change", updateSeats);
   updateSeats();
+
+  bookingForm.addEventListener("submit", (event) => {
+    if (isVisible(loginLink) || isVisible(registerLink)) {
+      event.preventDefault();
+      alert("Please log in or register before booking seats.");
+    }
+  });
 }

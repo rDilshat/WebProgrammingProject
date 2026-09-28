@@ -19,6 +19,11 @@
         "/^php -S 127\\.0\\.0\\.1:8000$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "sips": true,
+        "/^php -l pages/movie\\.php && php -l pages/search\\.php && php -l pages/booking\\.php && php -l pages/confirmation\\.php && node --check js/main\\.js && git diff --check$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }
