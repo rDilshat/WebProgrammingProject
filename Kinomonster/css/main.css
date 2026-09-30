@@ -632,13 +632,19 @@ button:hover {
 
 .movie-results {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 320px));
   gap: 22px;
+}
+
+.movie-card {
+  min-width: 0;
 }
 
 .movie-card img {
   display: block;
-  height: 310px;
+  width: 100%;
+  height: 473px;
+  aspect-ratio: 474 / 700;
   object-fit: cover;
 }
 
@@ -674,7 +680,9 @@ button:hover {
 }
 
 .movie-details img {
-  height: auto;
+  width: 100%;
+  height: 473px;
+  aspect-ratio: 474 / 700;
   object-fit: cover;
 }
 
@@ -758,6 +766,10 @@ button:hover {
 }
 
 @media (max-width: 600px) {
+  .movie-results {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .movie-details {
     grid-template-columns: 1fr;
   }
