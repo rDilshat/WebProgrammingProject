@@ -570,6 +570,13 @@ nav.nav-mobile {
   font-size: 13px;
 }
 
+.form-status {
+  margin: 0 0 18px;
+  color: #ff7b52;
+  font-size: 14px;
+  text-align: center;
+}
+
 .login .form-container > form > input:has(+ .field-error) {
   margin-bottom: 4px;
 }

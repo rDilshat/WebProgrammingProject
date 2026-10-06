@@ -62,20 +62,23 @@
     <div class="form-container">
       <p>Register</p>
 
-      <form id="registerForm">
+      <form id="registerForm" action="pages/register.php" method="post">
+        <p class="form-status" role="alert" hidden></p>
         <label for="registerFirstName">First Name</label>
         <input
           id="registerFirstName"
-          type="FirstName"
-          name="FirstName"
+          type="text"
+          name="firstName"
+          autocomplete="given-name"
           required
         >
 
         <label for="registerLastName">Last Name</label>
         <input
           id="registerLastName"
-          type="LastName"
-          name="LastName"
+          type="text"
+          name="lastName"
+          autocomplete="family-name"
           required
         >
 
@@ -84,6 +87,7 @@
           id="registerEmail"
           type="email"
           name="email"
+          autocomplete="email"
           required
         >
 
@@ -92,6 +96,7 @@
           id="registerPassword"
           type="password"
           name="password"
+          autocomplete="new-password"
           minlength="8"
           required
         >
@@ -101,6 +106,7 @@
           id="repeatPassword"
           type="password"
           name="repeatPassword"
+          autocomplete="new-password"
           minlength="8"
           required
         >

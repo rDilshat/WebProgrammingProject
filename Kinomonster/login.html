@@ -62,12 +62,14 @@
       <div class="form-container">
         <p>Log In</p>
 
-        <form id="loginForm">
+        <form id="loginForm" action="pages/login.php" method="post">
+          <p class="form-status" role="alert" hidden></p>
           <label for="loginEmail">Email</label>
           <input
             id="loginEmail"
             type="email"
             name="email"
+            autocomplete="email"
             required
           >
 
@@ -76,6 +78,7 @@
             id="loginPassword"
             type="password"
             name="password"
+            autocomplete="current-password"
             minlength="8"
             required
           >

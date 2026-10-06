@@ -1,6 +1,11 @@
 <?php
 
-session_start();
+require __DIR__ . '/../config/session.php';
+
+if (!isset($_SESSION['user'])) {
+    header('Location: ../login.html?status=invalid_credentials');
+    exit;
+}
 $movies = require __DIR__ . '/../data/movies.php';
 $movieId = $_POST['movie_id'] ?? '';
 $date = $_POST['date'] ?? '';

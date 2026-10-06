@@ -2,6 +2,22 @@ const forms = document.querySelectorAll(
   "#registerForm, #loginForm, #forgotPasswordForm"
 );
 
+const statusMessages = {
+  registered: "Account created. You can now log in.",
+  invalid_credentials: "Incorrect email or password.",
+  email_exists: "An account with this email already exists.",
+  invalid_data: "Please check the entered data.",
+  database_error: "The service is temporarily unavailable. Please try again later."
+};
+
+const status = new URLSearchParams(window.location.search).get("status");
+const statusElement = document.querySelector(".form-status");
+
+if (status && statusElement && statusMessages[status]) {
+  statusElement.textContent = statusMessages[status];
+  statusElement.hidden = false;
+}
+
 forms.forEach((form) => {
   // Отключаем стандартные всплывающие подсказки браузера
   form.noValidate = true;

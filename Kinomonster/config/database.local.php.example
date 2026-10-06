@@ -1,0 +1,9 @@
+<?php
+
+return [
+    'host' => '127.0.0.1',
+    'port' => '5432',
+    'database' => 'kinomonster',
+    'user' => 'kinomonster_app',
+    'password' => '12345',
+];
