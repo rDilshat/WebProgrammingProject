@@ -1,5 +1,39 @@
 const heroSection = document.querySelector("#heroSection");
 
+const mainScript = document.querySelector('script[src$="js/main.js"]');
+
+if (mainScript) {
+  const authStatusUrl = new URL("../pages/auth-status.php", mainScript.src);
+
+  fetch(authStatusUrl, { credentials: "same-origin" })
+    .then((response) => response.ok ? response.json() : Promise.reject())
+    .then((auth) => {
+      document.body.dataset.authenticated = String(auth.authenticated);
+
+      if (!auth.authenticated) {
+        return;
+      }
+
+      document.querySelectorAll('a[href$="login.html"], a[href$="register.html"]')
+        .forEach((link) => link.closest("li")?.remove());
+
+      document.querySelectorAll(".second-menu, .second-menu-mobile")
+        .forEach((menu) => {
+          const item = document.createElement("li");
+          const logoutLink = document.createElement("a");
+          menu.classList.add("authenticated-menu");
+          item.classList.add("auth-menu-item");
+          logoutLink.href = new URL("../pages/logout.php", mainScript.src);
+          logoutLink.textContent = `LOG OUT (${auth.user.firstName})`;
+          item.append(logoutLink);
+          menu.append(item);
+        });
+    })
+    .catch(() => {
+      document.body.dataset.authenticated = "false";
+    });
+}
+
 if (heroSection) {
   const slides = heroSection.querySelectorAll(".hero > li");
   const dots = heroSection.querySelectorAll(
@@ -111,7 +145,7 @@ if (bookingForm) {
   updateSeats();
 
   bookingForm.addEventListener("submit", (event) => {
-    if (isVisible(loginLink) || isVisible(registerLink)) {
+    if (document.body.dataset.authenticated !== "true" || isVisible(loginLink) || isVisible(registerLink)) {
       event.preventDefault();
       alert("Please log in or register before booking seats.");
     }

@@ -59,6 +59,23 @@ ul.second-menu > li:first-child > a::after {
   top: 14px;
 }
 
+ul.second-menu.authenticated-menu > li:nth-last-child(2) {
+  margin-left: 0;
+}
+
+ul.second-menu.authenticated-menu > li.auth-menu-item {
+  margin-left: 100px;
+}
+
+ul.second-menu.authenticated-menu > li.auth-menu-item > a {
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  display: inline;
+  white-space: nowrap;
+}
+
 nav.nav-desktop {
   display: none;
 }
