@@ -19,6 +19,8 @@ if (mainScript) {
 
       document.querySelectorAll(".second-menu, .second-menu-mobile")
         .forEach((menu) => {
+          addAccountLinks(menu, auth.user);
+
           const item = document.createElement("li");
           const logoutLink = document.createElement("a");
           menu.classList.add("authenticated-menu");
@@ -28,10 +30,50 @@ if (mainScript) {
           item.append(logoutLink);
           menu.append(item);
         });
+
+      document.querySelectorAll('.footer a[href$="login.html"]').forEach((link) => {
+        link.href = new URL("../pages/profile.php", mainScript.src);
+        link.textContent = "Profile";
+      });
+
+      document.querySelectorAll('.footer a[href$="register.html"]').forEach((link) => {
+        link.href = new URL("../pages/logout.php", mainScript.src);
+        link.textContent = "Log Out";
+      });
     })
     .catch(() => {
       document.body.dataset.authenticated = "false";
     });
+
+  // PROFILE для всех вошедших и ADMIN только для администратора
+  function addAccountLinks(menu, user) {
+    const links = [["PROFILE", "../pages/profile.php"]];
+
+    if (user.role === "admin") {
+      links.push(["ADMIN", "../pages/admin.php"]);
+    }
+
+    links.forEach(([label, path], index) => {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = new URL(path, mainScript.src);
+      link.textContent = label;
+      item.classList.add("auth-menu-link");
+
+      if (index === 0) {
+        item.classList.add("auth-menu-start");
+      }
+
+      // Подсвечиваем текущую страницу, как остальные пункты меню
+      if (link.pathname === window.location.pathname) {
+        link.classList.add("active");
+        link.setAttribute("aria-current", "page");
+      }
+
+      item.append(link);
+      menu.append(item);
+    });
+  }
 }
 
 if (heroSection) {
@@ -117,6 +159,8 @@ const bookingForm = document.querySelector(".booking-panel form");
 
 if (bookingForm) {
   const sessionSelect = bookingForm.querySelector("select[name='session']");
+  const dateInput = bookingForm.querySelector("input[name='date']");
+  const dbBookedSeats = JSON.parse(bookingForm.dataset.bookedDb || "{}");
   const seatLabels = bookingForm.querySelectorAll(".seat-grid label[data-seat]");
   const loginLink = document.querySelector("a[href$='login.html']");
   const registerLink = document.querySelector("a[href$='register.html']");
@@ -126,9 +170,11 @@ if (bookingForm) {
   }
 
   function updateSeats() {
+    const dbKey = `${dateInput.value}|${sessionSelect.value}`;
     const booked = (sessionSelect.selectedOptions[0].dataset.booked || "")
       .split(",")
-      .filter(Boolean);
+      .filter(Boolean)
+      .concat((dbBookedSeats[dbKey] || []).map(String));
 
     seatLabels.forEach((label) => {
       const input = label.querySelector("input");
@@ -142,6 +188,7 @@ if (bookingForm) {
   }
 
   sessionSelect.addEventListener("change", updateSeats);
+  dateInput.addEventListener("change", updateSeats);
   updateSeats();
 
   bookingForm.addEventListener("submit", (event) => {
