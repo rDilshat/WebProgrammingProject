@@ -1,5 +1,5 @@
 const forms = document.querySelectorAll(
-  "#registerForm, #loginForm, #forgotPasswordForm, #profileForm"
+  "#registerForm, #loginForm, #forgotPasswordForm, #resetPasswordForm, #profileForm"
 );
 
 const statusMessages = {
@@ -7,6 +7,7 @@ const statusMessages = {
   invalid_credentials: "Incorrect email or password.",
   email_exists: "An account with this email already exists.",
   invalid_data: "Please check the entered data.",
+  password_reset: "Password changed. You can now log in.",
   database_error: "The service is temporarily unavailable. Please try again later."
 };
 
@@ -23,11 +24,11 @@ forms.forEach((form) => {
   form.noValidate = true;
 
   const inputs = form.querySelectorAll(
-    "input:not([type='submit'])"
+    "input:not([type='submit']):not([type='hidden'])"
   );
 
-  const password = form.querySelector("#registerPassword");
-  const repeatPassword = form.querySelector("#repeatPassword");
+  const password = form.querySelector("input[name='password']");
+  const repeatPassword = form.querySelector("input[name='repeatPassword']");
 
   function getErrorMessage(input) {
     if (input.required && input.value.trim() === "") {
@@ -44,6 +45,7 @@ forms.forEach((form) => {
 
     if (
       input === repeatPassword &&
+      password &&
       password.value !== repeatPassword.value
     ) {
       return "Passwords do not match.";

@@ -6,11 +6,40 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #0c0b0b;
   color: white;
   font-family: "Oswald", sans-serif;
   overflow-x: hidden;
+}
+
+main {
+  animation: page-enter 180ms ease-out both;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  main {
+    animation: none;
+  }
+
 }
 
 input {
@@ -123,11 +152,47 @@ ul.second-menu-mobile a.active {
   color: #ff3c00;
 }
 
+.hero {
+  display: grid;
+}
+
+.hero > li {
+  grid-area: 1 / 1;
+  pointer-events: none;
+}
+
+.hero > li.active {
+  pointer-events: auto;
+}
+
 .main-slider-img {
   position: absolute;
   top: 0;
   object-fit: cover;
   object-position: top;
+  filter: opacity(0);
+  visibility: hidden;
+  transition: filter 400ms ease, visibility 0s linear 400ms;
+}
+
+.hero > li.active .main-slider-img {
+  filter: opacity(1);
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.hero > li .hero-movie {
+  visibility: hidden;
+}
+
+.hero > li.active .hero-movie {
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-slider-img {
+    transition: none;
+  }
 }
 
 .hero-movie {
@@ -163,6 +228,7 @@ button {
 .next-main-slider-dots {
   display: flex;
   justify-content: flex-end;
+  margin-top: 24px;
 }
 
 .next-main-slider-dots > span {
@@ -527,8 +593,23 @@ nav.nav-mobile {
   color: #c1c1c1;
 }
 
-#forgotPasswordForm > input[type="submit"] {
+#forgotPasswordForm > input[type="submit"],
+#resetPasswordForm > input[type="submit"] {
   width: 180px;
+}
+
+.dev-reset-link {
+  margin: 0 0 20px;
+  padding: 12px;
+  background-color: #242323;
+  color: #a3a3a3;
+  font-size: 14px;
+  text-align: center;
+}
+
+.dev-reset-link a {
+  color: #ff7b52;
+  overflow-wrap: anywhere;
 }
 
 .login > p {
@@ -635,6 +716,10 @@ button:hover {
 .movie-search,
 .flow-page {
   padding-bottom: 40px;
+}
+
+.movie-search > .lbl-p {
+  margin-bottom: 16px;
 }
 
 .movie-search form,
@@ -820,6 +905,7 @@ button:hover {
   margin-top: 42px;
   padding: 28px;
   background-color: #161515;
+  scroll-margin-top: 72px;
 }
 
 .account-panel > .lbl-p {

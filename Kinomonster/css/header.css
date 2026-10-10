@@ -22,6 +22,17 @@ header .header-nav ul {
   justify-content: space-between;
 }
 
+ul.second-menu {
+  visibility: hidden;
+  opacity: 0;
+}
+
+body.auth-status-ready ul.second-menu {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+
 ul.second-menu > li > a {
   padding: 0 0 0 17px;
 }
