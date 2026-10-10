@@ -57,6 +57,18 @@ UPDATE users SET role = 'admin' WHERE email = 'admin@example.com';
 
 Then log out and log in again — the ADMIN link appears in the menu and `pages/admin.php` opens.
 
+## Local password reset
+
+The password reset flow works without an email server during local development:
+
+1. Open `pages/forgot-password.php` and submit the account email.
+2. Follow the local development link shown on the page.
+3. Choose a new password within 30 minutes.
+
+Reset links are single-use. Only a SHA-256 hash of each token is stored in the
+`password_reset_tokens` table. In production, send the same link by email instead
+of displaying it on the page.
+
 - `pages/profile.php` — user info, Edit Profile, booking history, Log Out.
 - `pages/admin.php` — dashboard, users, bookings with status change (administrators only).
 

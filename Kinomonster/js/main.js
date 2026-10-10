@@ -43,6 +43,9 @@ if (mainScript) {
     })
     .catch(() => {
       document.body.dataset.authenticated = "false";
+    })
+    .finally(() => {
+      document.body.classList.add("auth-status-ready");
     });
 
   // PROFILE для всех вошедших и ADMIN только для администратора
@@ -87,8 +90,7 @@ if (heroSection) {
 
   function showSlide() {
     slides.forEach((slide, index) => {
-      slide.style.display =
-        index === activeSlide ? "block" : "none";
+      slide.classList.toggle("active", index === activeSlide);
     });
 
     dots.forEach((dot, index) => {
@@ -113,35 +115,35 @@ if (heroSection) {
     });
   });
 
-  // Затемнение изображения и шапки при прокрутке
-  const checkpoint = 600;
+}
 
-  window.addEventListener("scroll", () => {
-    const currentScroll = window.scrollY;
-    const header = document.querySelector(".header-nav");
+// Фон шапки при прокрутке на всех страницах
+const desktopHeader = document.querySelector(".header-nav");
+const scrollCheckpoint = 600;
 
-    let background = "transparent";
-    let opacity = 1;
+function updateHeaderOnScroll() {
+  if (!desktopHeader) {
+    return;
+  }
 
-    if (currentScroll <= checkpoint) {
-      opacity = 1 - currentScroll / checkpoint;
-    } else {
-      background = "#000";
-      opacity = 0;
-    }
+  const currentScroll = window.scrollY;
 
-    if (header) {
-      header.style.background = background;
-    }
+  if (!heroSection) {
+    desktopHeader.style.background = currentScroll > 0 ? "#000" : "transparent";
+    return;
+  }
 
-    slides.forEach((slide) => {
-      const image = slide.querySelector("img");
+  const opacity = Math.max(0, 1 - currentScroll / scrollCheckpoint);
+  desktopHeader.style.background = currentScroll > scrollCheckpoint ? "#000" : "transparent";
 
-      if (image) {
-        image.style.opacity = String(opacity);
-      }
-    });
+  heroSection.querySelectorAll(".hero > li img").forEach((image) => {
+    image.style.opacity = String(opacity);
   });
+}
+
+if (desktopHeader) {
+  window.addEventListener("scroll", updateHeaderOnScroll);
+  updateHeaderOnScroll();
 }
 
 // Мобильное меню
