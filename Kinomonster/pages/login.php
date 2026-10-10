@@ -19,7 +19,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
 try {
     $pdo = require __DIR__ . '/../config/database.php';
     $statement = $pdo->prepare(
-        'SELECT id, first_name, last_name, email, password_hash
+        'SELECT id, first_name, last_name, email, password_hash, role
          FROM users
          WHERE email = :email
          LIMIT 1'
@@ -44,6 +44,7 @@ $_SESSION['user'] = [
     'firstName' => $user['first_name'],
     'lastName' => $user['last_name'],
     'email' => $user['email'],
+    'role' => $user['role'],
 ];
 
 header('Location: ../project.html');

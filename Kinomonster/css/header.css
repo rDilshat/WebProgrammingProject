@@ -100,6 +100,14 @@ ul.second-menu.authenticated-menu > li.auth-menu-item > a {
   white-space: nowrap;
 }
 
+ul.second-menu.authenticated-menu > li.auth-menu-start {
+  margin-left: 100px;
+}
+
+ul.second-menu.authenticated-menu > li.auth-menu-start ~ li.auth-menu-item {
+  margin-left: 17px;
+}
+
 nav.nav-desktop {
   display: none;
 }

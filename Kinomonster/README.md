@@ -41,6 +41,25 @@ ALTER TABLE public.users OWNER TO kinomonster_app;
 ALTER SEQUENCE public.users_id_seq OWNER TO kinomonster_app;
 ```
 
+## User Profile and Admin Panel
+
+`database/schema.sql` also adds the `role` column to `users` and creates the `bookings` table. If your database was created before, run the file again — it only adds what is missing:
+
+```sql
+\i database/schema.sql
+```
+
+New users get the `user` role. To make an administrator, run in your database:
+
+```sql
+UPDATE users SET role = 'admin' WHERE email = 'admin@example.com';
+```
+
+Then log out and log in again — the ADMIN link appears in the menu and `pages/admin.php` opens.
+
+- `pages/profile.php` — user info, Edit Profile, booking history, Log Out.
+- `pages/admin.php` — dashboard, users, bookings with status change (administrators only).
+
 ## Run locally
 
 From the `Kinomonster` directory:

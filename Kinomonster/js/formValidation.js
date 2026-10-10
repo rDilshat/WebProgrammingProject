@@ -1,5 +1,5 @@
 const forms = document.querySelectorAll(
-  "#registerForm, #loginForm, #forgotPasswordForm"
+  "#registerForm, #loginForm, #forgotPasswordForm, #profileForm"
 );
 
 const statusMessages = {

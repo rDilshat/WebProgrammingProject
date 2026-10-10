@@ -151,8 +151,8 @@ ul.second-menu-mobile a.active {
 }
 
 button {
-  width: 209px;
-  height: 57px;
+  width: 201px;
+  height: 42px;
   font-size: 20px;
   background-color: #ff501a;
   color: white;
@@ -813,4 +813,322 @@ button:hover {
   .seat-grid {
     grid-template-columns: repeat(6, 42px);
   }
+}
+
+/* User Profile / Admin Panel */
+.account-panel {
+  margin-top: 42px;
+  padding: 28px;
+  background-color: #161515;
+}
+
+.account-panel > .lbl-p {
+  margin-top: 0;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin: 18px 0 24px;
+}
+
+.profile-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background-color: #ff501a;
+  font-size: 38px;
+}
+
+.profile-header h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.profile-info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 18px;
+}
+
+.profile-info dt,
+.account-note,
+.data-table th,
+.data-table small {
+  color: #888;
+}
+
+.profile-edit {
+  margin-bottom: 18px;
+}
+
+.profile-edit summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.profile-edit summary::-webkit-details-marker {
+  display: none;
+}
+
+.account-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 18px;
+  align-items: start;
+  margin-top: 22px;
+}
+
+.account-form label {
+  display: block;
+  margin-bottom: 6px;
+  color: #a3a3a3;
+}
+
+.account-form input {
+  display: block;
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  background-color: #404040;
+}
+
+.account-form button {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: 8px;
+}
+
+.small-button {
+  width: auto;
+  height: 42px;
+  padding: 0 18px;
+  font-size: 16px;
+  transition: background-color 200ms;
+}
+
+.secondary-button {
+  background-color: transparent;
+  border: 1px solid #fff;
+  transition: border-color 200ms, color 200ms;
+}
+
+.secondary-button:hover {
+  background-color: transparent;
+  border-color: #f44336;
+  color: #f44336;
+}
+
+.account-message {
+  margin: 14px 0;
+  padding: 10px 14px;
+  border-left: 3px solid;
+}
+
+.account-message.success {
+  border-color: #65c466;
+  color: #65c466;
+}
+
+.account-message.error {
+  border-color: #ff4d4d;
+  color: #ff7b52;
+}
+
+.account-note {
+  margin: 8px 0 18px;
+}
+
+.table-wrapper {
+  position: relative;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #404040;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.data-table tbody tr {
+  transition: background-color 200ms;
+}
+
+.data-table tbody tr:hover {
+  background-color: #1f1e1e;
+}
+
+.data-table a {
+  transition: color 200ms;
+}
+
+.data-table a:hover {
+  color: #f44336;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 14px;
+  border: 1px solid;
+}
+
+.status-confirmed {
+  color: #65c466;
+}
+
+.status-pending {
+  color: #ffb84d;
+}
+
+.status-cancelled {
+  color: #888;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 80px;
+  margin-top: 42px;
+  padding: 24px;
+  background-color: #161515;
+}
+
+.admin-title {
+  margin-bottom: 18px;
+  color: #ff501a;
+  letter-spacing: 1px;
+}
+
+.admin-sidebar ul {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-sidebar a {
+  transition: color 200ms;
+}
+
+.admin-sidebar a:hover {
+  color: #f44336;
+}
+
+.admin-content {
+  min-width: 0;
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.stat-cards li {
+  padding: 20px;
+  border: 1px solid #404040;
+  color: #a3a3a3;
+  transition: border-color 200ms;
+}
+
+.stat-cards li:hover {
+  border-color: #ff501a;
+}
+
+.stat-cards span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 36px;
+  color: #fff;
+}
+
+.status-form {
+  display: flex;
+  gap: 8px;
+}
+
+.status-form select {
+  height: 42px;
+  padding: 0 10px;
+  background-color: #404040;
+  color: #fff;
+  border: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .admin-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .admin-sidebar {
+    position: static;
+  }
+
+  .admin-sidebar ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+  }
+
+  .account-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .account-panel {
+    padding: 20px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 28px;
+  }
+
+  .profile-header h1 {
+    font-size: 28px;
+  }
+}
+
+#heroSection .movie-search {
+  position: relative;
+  z-index: 2;
 }
