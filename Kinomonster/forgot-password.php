@@ -91,9 +91,9 @@ unset($_SESSION['password_reset_link']);
 <header>
   <nav class="header-nav nav-desktop" aria-label="Main navigation">
     <div class="header-nav-elems default-container">
-      <ul><li><a href="project.html" class="logo"><img src="photos/logo_kinomonster.svg" alt="KinoMonster"></a></li></ul>
+      <ul><li><a href="project.php" class="logo"><img src="photos/logo_kinomonster.svg" alt="KinoMonster"></a></li></ul>
       <ul class="second-menu">
-        <li><a href="project.html">HOME</a></li>
+        <li><a href="project.php">HOME</a></li>
         <li><a href="pages/search.php">MOVIES</a></li>
         <li><a href="login.html" class="active" aria-current="page">LOG IN</a></li>
         <li><a href="register.html">REGISTER</a></li>
@@ -104,10 +104,10 @@ unset($_SESSION['password_reset_link']);
     <div class="header-nav-elems-mobile">
       <ul>
         <li class="mobile-btn"><img src="photos/menuicon.svg" alt="Menu"></li>
-        <li><a href="project.html" class="logo"><img src="photos/logo_kinomonster.svg" alt="KinoMonster"></a></li>
+        <li><a href="project.php" class="logo"><img src="photos/logo_kinomonster.svg" alt="KinoMonster"></a></li>
       </ul>
       <ul class="second-menu-mobile">
-        <li><a href="project.html">HOME</a></li>
+        <li><a href="project.php">HOME</a></li>
         <li><a href="pages/search.php">MOVIES</a></li>
         <li><a href="login.html" class="active" aria-current="page">LOG IN</a></li>
         <li><a href="register.html">REGISTER</a></li>
@@ -144,7 +144,7 @@ unset($_SESSION['password_reset_link']);
 
 <footer class="footer">
   <div class="footer-content">
-    <div class="footer-section"><h4>Main links</h4><a href="project.html">Home</a><a href="pages/search.php">Movies</a></div>
+    <div class="footer-section"><h4>Main links</h4><a href="project.php">Home</a><a href="pages/search.php">Movies</a></div>
     <div class="footer-section"><h4>Account</h4><a href="login.html">Log In</a><a href="register.html">Register</a></div>
   </div>
   <div class="social-media">

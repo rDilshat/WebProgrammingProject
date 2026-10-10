@@ -23,13 +23,13 @@ $results = array_filter($movies, static function (array $movie) use ($query): bo
     <div class="header-nav-elems default-container">
       <ul>
         <li>
-          <a href="../project.html" class="logo">
+          <a href="../project.php" class="logo">
             <img src="../photos/logo_kinomonster.svg" alt="KinoMonster">
           </a>
         </li>
       </ul>
       <ul class="second-menu">
-        <li><a href="../project.html">HOME</a></li>
+        <li><a href="../project.php">HOME</a></li>
         <li><a href="search.php" class="active" aria-current="page">MOVIES</a></li>
         <li><a href="../login.html">LOG IN</a></li>
         <li><a href="../register.html">REGISTER</a></li>
@@ -44,13 +44,13 @@ $results = array_filter($movies, static function (array $movie) use ($query): bo
           <img src="../photos/menuicon.svg" alt="Menu">
         </li>
         <li>
-          <a href="../project.html" class="logo">
+          <a href="../project.php" class="logo">
             <img src="../photos/logo_kinomonster.svg" alt="KinoMonster">
           </a>
         </li>
       </ul>
       <ul class="second-menu-mobile">
-        <li><a href="../project.html">HOME</a></li>
+        <li><a href="../project.php">HOME</a></li>
         <li><a href="search.php" class="active" aria-current="page">MOVIES</a></li>
         <li><a href="../login.html">LOG IN</a></li>
         <li><a href="../register.html">REGISTER</a></li>
@@ -89,7 +89,7 @@ $results = array_filter($movies, static function (array $movie) use ($query): bo
     <div class="footer-content">
       <div class="footer-section">
         <h4>Main links</h4>
-        <a href="../project.html">Home</a>
+        <a href="../project.php">Home</a>
         <a href="search.php">Movies</a>
       </div>
       <div class="footer-section">
