@@ -706,4 +706,42 @@ return array (
       ),
     ),
   ),
+  'movie' => 
+  array (
+    'title' => 'апрапр',
+    'image' => 'movie-0e5357fa.jpg',
+    'description' => 'ваыва',
+    'genre' => 'парп',
+    'duration' => '11',
+    'sessions' => 
+    array (
+      0 => '18:00',
+    ),
+    'booked' => 
+    array (
+      '18:00' => 
+      array (
+      ),
+    ),
+    'managed' => true,
+  ),
+  'gfhgfh' => 
+  array (
+    'title' => 'gfhgfh',
+    'image' => 'gfhgfh-d4fe84f0.jpg',
+    'description' => '2323',
+    'genre' => 'gfhgfh',
+    'duration' => '11',
+    'sessions' => 
+    array (
+      0 => '18:00',
+    ),
+    'booked' => 
+    array (
+      '18:00' => 
+      array (
+      ),
+    ),
+    'managed' => true,
+  ),
 );

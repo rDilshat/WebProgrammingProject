@@ -313,16 +313,28 @@ button {
 
 .posters {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(237px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(237px, 1fr));
   gap: 9px;
 }
 
 .poster {
   background-color: green;
   min-width: 237px;
-  min-height: 350px;
+  aspect-ratio: 474 / 700;
   position: relative;
   transition: 250ms all;
+  overflow: hidden;
+}
+
+.poster > a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.poster img {
+  display: block;
+  object-fit: cover;
 }
 
 .poster:hover {
@@ -472,7 +484,7 @@ nav.nav-mobile {
   }
 
   .posters {
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   }
 
   .poster {
