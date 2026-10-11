@@ -90,8 +90,8 @@ try {
                         exit;
                     }
 
-                    $fileInfo = new finfo(FILEINFO_MIME_TYPE);
-                    $mime = $fileInfo->file($_FILES['poster']['tmp_name']);
+                    $imageInfo = @getimagesize($_FILES['poster']['tmp_name']);
+                    $mime = is_array($imageInfo) ? ($imageInfo['mime'] ?? '') : '';
                     $extensions = [
                         'image/jpeg' => 'jpg',
                         'image/png' => 'png',
