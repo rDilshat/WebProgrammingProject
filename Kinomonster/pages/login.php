@@ -47,5 +47,5 @@ $_SESSION['user'] = [
     'role' => $user['role'],
 ];
 
-header('Location: ../project.html');
+header('Location: ../project.php');
 exit;
