@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 require __DIR__ . '/../config/session.php';
 
-// Админ-панель доступна только вошедшему пользователю
 if (!isset($_SESSION['user'])) {
     header('Location: ../login.html');
     exit;
 }
 
-require __DIR__ . '/../data/movie_store.php';
-$movies = loadMovies();
+$movies = [];
 $statuses = ['pending', 'confirmed', 'cancelled'];
 $isAdmin = false;
 $databaseError = false;
@@ -28,12 +26,20 @@ function e(string $value): string
 try {
     $pdo = require __DIR__ . '/../config/database.php';
 
-    // Роль проверяем по базе, а не по сессии: так снятие прав срабатывает сразу
     $statement = $pdo->prepare('SELECT role FROM users WHERE id = :id');
     $statement->execute(['id' => (int) $_SESSION['user']['id']]);
     $isAdmin = $statement->fetchColumn() === 'admin';
 
     if ($isAdmin) {
+        $movieRows = $pdo->query(
+            'SELECT id, slug, title, poster
+             FROM movies
+             ORDER BY title'
+        )->fetchAll();
+        foreach ($movieRows as $movieRow) {
+            $movies[$movieRow['slug']] = $movieRow;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $action = (string) ($_POST['action'] ?? '');
 
@@ -134,8 +140,19 @@ try {
             $status = (string) ($_POST['status'] ?? '');
 
             if ($bookingId > 0 && in_array($status, $statuses, true)) {
+                $pdo->beginTransaction();
                 $statement = $pdo->prepare('UPDATE bookings SET status = :status WHERE id = :id');
                 $statement->execute(['status' => $status, 'id' => $bookingId]);
+                $statement = $pdo->prepare(
+                    'UPDATE booking_seats
+                     SET is_active = :is_active
+                     WHERE booking_id = :booking_id'
+                );
+                $statement->execute([
+                    'is_active' => $status !== 'cancelled',
+                    'booking_id' => $bookingId,
+                ]);
+                $pdo->commit();
                 header('Location: admin.php?status=updated#bookings');
             } else {
                 header('Location: admin.php?status=invalid#bookings');
@@ -150,11 +167,23 @@ try {
         )->fetchAll();
 
         $bookings = $pdo->query(
-            'SELECT b.id, b.movie_id, b.booking_date, b.session_time, b.seats, b.status,
-                    u.first_name, u.last_name, u.email
+            "SELECT b.id, b.status, s.starts_at,
+                    m.slug AS movie_slug, m.title AS movie_title,
+                    u.first_name, u.last_name, u.email,
+                    COALESCE(
+                        STRING_AGG(bs.seat_number::text, ', ' ORDER BY bs.seat_number)
+                            FILTER (WHERE bs.is_active),
+                        ''
+                    ) AS seats
              FROM bookings b
+             JOIN showtimes s ON s.id = b.showtime_id
+             JOIN movies m ON m.id = s.movie_id
              JOIN users u ON u.id = b.user_id
-             ORDER BY b.created_at DESC'
+             LEFT JOIN booking_seats bs
+               ON bs.booking_id = b.id AND bs.showtime_id = b.showtime_id
+             GROUP BY b.id, s.starts_at, m.slug, m.title,
+                      u.first_name, u.last_name, u.email
+             ORDER BY b.created_at DESC"
         )->fetchAll();
     }
 } catch (PDOException $exception) {
@@ -393,9 +422,9 @@ $message = $messages[$_GET['status'] ?? ''] ?? null;
                     <tr>
                       <td>#<?= e((string) $booking['id']) ?></td>
                       <td><?= e($booking['first_name'] . ' ' . $booking['last_name']) ?><br><small><?= e($booking['email']) ?></small></td>
-                      <td><?= e($movies[$booking['movie_id']]['title'] ?? $booking['movie_id']) ?></td>
-                      <td><?= e(date('d.m.Y', strtotime($booking['booking_date']))) ?></td>
-                      <td><?= e($booking['session_time']) ?></td>
+                      <td><?= e($booking['movie_title']) ?></td>
+                      <td><?= e(date('d.m.Y', strtotime($booking['starts_at']))) ?></td>
+                      <td><?= e(date('H:i', strtotime($booking['starts_at']))) ?></td>
                       <td><?= e($booking['seats']) ?></td>
                       <td>
                         <form class="status-form" action="admin.php" method="post">
