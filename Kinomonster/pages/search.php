@@ -2,8 +2,16 @@
 
 declare(strict_types=1);
 
-$query = trim((string) ($_GET['q'] ?? ''));
-$genreFilter = trim((string) ($_GET['genre'] ?? ''));
+$query = is_string($_GET['q'] ?? null) ? trim($_GET['q']) : '';
+$genreFilter = is_string($_GET['genre'] ?? null) ? trim($_GET['genre']) : '';
+$sort = is_string($_GET['sort'] ?? null) ? $_GET['sort'] : 'title';
+$direction = is_string($_GET['direction'] ?? null) ? $_GET['direction'] : 'asc';
+if (!in_array($sort, ['title', 'year', 'duration'], true)) {
+    $sort = 'title';
+}
+if (!in_array($direction, ['asc', 'desc'], true)) {
+    $direction = 'asc';
+}
 $results = [];
 $genres = [];
 $databaseError = false;
@@ -66,6 +74,7 @@ try {
   <link rel="stylesheet" href="../css/header.css">
   <link rel="stylesheet" href="../css/footer.css">
   <script src="../js/main.js" defer></script>
+  <script src="../js/movies.js" defer></script>
 </head>
 <body>
 <header>
@@ -111,7 +120,7 @@ try {
   <main class="flow-page default-container">
     <section class="movie-search">
       <p class="lbl-p">Search movies</p>
-      <form action="search.php" method="get">
+      <form id="movie-search-form" action="search.php" method="get">
         <label for="search-query">Movie title</label>
         <input id="search-query" type="search" name="q" value="<?= htmlspecialchars($query, ENT_QUOTES, 'UTF-8') ?>" placeholder="Search by title">
         <label for="search-genre">Genre</label>
@@ -123,17 +132,31 @@ try {
             </option>
           <?php endforeach; ?>
         </select>
+        <label for="search-sort">Sort by</label>
+        <select id="search-sort" name="sort">
+          <option value="title" <?= $sort === 'title' ? 'selected' : '' ?>>Title</option>
+          <option value="year" <?= $sort === 'year' ? 'selected' : '' ?>>Year</option>
+          <option value="duration" <?= $sort === 'duration' ? 'selected' : '' ?>>Duration</option>
+        </select>
+        <label for="search-direction">Order</label>
+        <select id="search-direction" name="direction">
+          <option value="asc" <?= $direction === 'asc' ? 'selected' : '' ?>>Ascending</option>
+          <option value="desc" <?= $direction === 'desc' ? 'selected' : '' ?>>Descending</option>
+        </select>
         <button type="submit">SEARCH</button>
       </form>
     </section>
     <section>
-      <p class="lbl-p">Results<?= $query !== '' ? ' for “' . htmlspecialchars($query, ENT_QUOTES, 'UTF-8') . '”' : '' ?></p>
+      <p class="lbl-p">Results</p>
       <?php if ($databaseError): ?>
-        <p class="empty-state">The movie database is temporarily unavailable.</p>
+        <p id="search-status" class="search-status" role="status">The movie database is temporarily unavailable.</p>
+        <div id="movie-results" class="movie-results" aria-busy="false"></div>
       <?php elseif ($results === []): ?>
-        <p class="empty-state">Nothing found</p>
+        <p id="search-status" class="search-status" role="status">Nothing found</p>
+        <div id="movie-results" class="movie-results" aria-busy="false"></div>
       <?php else: ?>
-        <div class="movie-results">
+        <p id="search-status" class="search-status" role="status"><?= count($results) ?> movies found</p>
+        <div id="movie-results" class="movie-results" aria-busy="false">
           <?php foreach ($results as $movie): ?>
             <article class="movie-card">
               <a href="movie.php?id=<?= urlencode($movie['slug']) ?>"><img src="../photos/<?= htmlspecialchars($movie['poster'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') ?> poster"></a>
@@ -144,6 +167,7 @@ try {
           <?php endforeach; ?>
         </div>
       <?php endif; ?>
+      <nav id="movie-pagination" class="movie-pagination" aria-label="Movie search pages"></nav>
     </section>
   </main>
  <footer class="footer">

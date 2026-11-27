@@ -15,6 +15,10 @@ function accountLinks(user, inPagesDirectory) {
 
   if (user.role === "admin") {
     links.push({
+      label: "MOVIES ADMIN",
+      href: inPagesDirectory ? "../admin-movies.php" : "admin-movies.php",
+    });
+    links.push({
       label: "ADMIN",
       href: `${prefix}admin.php`,
     });
