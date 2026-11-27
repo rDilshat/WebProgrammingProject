@@ -158,8 +158,6 @@ ul.second-menu-mobile a.active {
 
 .hero > li {
   grid-area: 1 / 1;
-  position: relative;
-  height: 75vh;
   pointer-events: none;
 }
 
@@ -169,13 +167,9 @@ ul.second-menu-mobile a.active {
 
 .main-slider-img {
   position: absolute;
-  inset: 0;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: top;
   filter: opacity(0);
   visibility: hidden;
   transition: filter 400ms ease, visibility 0s linear 400ms;
@@ -346,51 +340,6 @@ button {
 .poster:hover {
   cursor: pointer;
   transform: scale(1.1);
-}
-
-.database-poster {
-  min-height: 520px;
-  aspect-ratio: auto;
-  background-color: #161515;
-  overflow: hidden;
-}
-
-.database-poster > a {
-  height: 473px;
-}
-
-.database-poster img {
-  width: 100%;
-  height: 473px;
-}
-
-.database-poster-info {
-  position: relative;
-  z-index: 3;
-  padding: 10px 12px 14px;
-  background-color: #161515;
-}
-
-.database-poster-info h2 {
-  margin: 0 0 4px;
-  font-size: 18px;
-}
-
-.database-poster-info p {
-  margin: 0 0 8px;
-  color: #b8b8b8;
-  font-size: 14px;
-}
-
-.hero-trailer-button {
-  background-color: #404040;
-}
-
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
 }
 
 .poster:hover > a::after {
@@ -809,51 +758,6 @@ button:hover {
   border: 0;
 }
 
-.movie-search select {
-  height: 42px;
-  min-width: 150px;
-  padding: 0 12px;
-  background-color: #404040;
-  color: white;
-  border: 0;
-}
-
-.search-status {
-  min-height: 24px;
-  margin: 14px 0;
-  color: #b8b8b8;
-}
-
-.search-status[data-state="loading"] {
-  color: #ffb84d;
-}
-
-.search-status[data-state="error"] {
-  color: #ff7b52;
-}
-
-.search-status[data-state="success"] {
-  color: #65c466;
-}
-
-.movie-pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  margin: 28px 0;
-}
-
-.movie-pagination button {
-  min-height: 42px;
-  padding: 0 18px;
-}
-
-.movie-pagination button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
 .movie-results {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 320px));
@@ -914,26 +818,6 @@ button:hover {
 .confirmation h1 {
   font-size: 42px;
   margin: 12px 0;
-}
-
-.trailer-section {
-  margin-top: 42px;
-}
-
-.trailer-player {
-  position: relative;
-  width: 100%;
-  max-width: 900px;
-  aspect-ratio: 16 / 9;
-  background: #000;
-}
-
-.trailer-player iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
 }
 
 .success-icon {
@@ -1291,113 +1175,6 @@ button:hover {
   min-width: 0;
 }
 
-.admin-movie-form,
-.admin-movie-list {
-  margin: 24px 0;
-  padding: 24px;
-  background-color: #161515;
-}
-
-.admin-movie-form h2,
-.admin-movie-list h2 {
-  margin-bottom: 18px;
-}
-
-.admin-movie-form form {
-  display: grid;
-  gap: 10px;
-}
-
-.admin-movie-form input:not([type="checkbox"]):not([type="file"]),
-.admin-movie-form textarea,
-.admin-movie-form select {
-  width: 100%;
-  min-height: 42px;
-  padding: 10px 12px;
-  border: 0;
-  background-color: #404040;
-  color: #fff;
-  font: inherit;
-}
-
-.admin-movie-form input[type="file"] {
-  all: revert;
-  max-width: 100%;
-  padding: 8px 0;
-  color: #b8b8b8;
-}
-
-.admin-movie-form select {
-  min-height: 42px;
-}
-
-.admin-movie-form input[type="datetime-local"] {
-  color-scheme: dark;
-}
-
-.admin-movie-form label,
-.movie-genre-options legend {
-  color: #b8b8b8;
-}
-
-.movie-form-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.movie-form-row > div {
-  display: grid;
-  gap: 10px;
-}
-
-.movie-genre-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 18px;
-  margin: 12px 0;
-  border: 0;
-}
-
-.movie-genre-options legend {
-  margin-bottom: 10px;
-}
-
-.movie-genre-options label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.movie-genre-options input[type="checkbox"] {
-  all: revert;
-  accent-color: #ff501a;
-}
-
-.admin-movie-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.admin-movie-actions form {
-  display: inline-flex;
-}
-
-.admin-movie-actions button {
-  min-height: 42px;
-  padding: 0 14px;
-}
-
-.admin-movie-actions .danger-button {
-  background-color: #8e2c1a;
-}
-
-.admin-movie-actions .danger-button:hover {
-  background-color: #b13d24;
-}
-
 .stat-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -1467,15 +1244,6 @@ button:hover {
 }
 
 @media (max-width: 600px) {
-  .movie-form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-movie-form,
-  .admin-movie-list {
-    padding: 18px;
-  }
-
   .account-panel {
     padding: 20px;
   }

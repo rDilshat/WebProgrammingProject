@@ -1,68 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-$query = is_string($_GET['q'] ?? null) ? trim($_GET['q']) : '';
-$genreFilter = is_string($_GET['genre'] ?? null) ? trim($_GET['genre']) : '';
-$sort = is_string($_GET['sort'] ?? null) ? $_GET['sort'] : 'title';
-$direction = is_string($_GET['direction'] ?? null) ? $_GET['direction'] : 'asc';
-if (!in_array($sort, ['title', 'year', 'duration'], true)) {
-    $sort = 'title';
-}
-if (!in_array($direction, ['asc', 'desc'], true)) {
-    $direction = 'asc';
-}
-$results = [];
-$genres = [];
-$databaseError = false;
-
-try {
-    $pdo = require __DIR__ . '/../config/database.php';
-    $genres = $pdo->query('SELECT id, name FROM genres ORDER BY name')->fetchAll();
-
-    $sql = 'SELECT DISTINCT m.id, m.slug, m.title, m.description,
-                   m.duration_min, m.release_year, m.poster, m.trailer_url
-            FROM movies m';
-    $conditions = ['m.is_active = TRUE'];
-    $parameters = [];
-
-    if ($genreFilter !== '') {
-        $sql .= ' JOIN movie_genres mg_filter ON mg_filter.movie_id = m.id
-                  JOIN genres g_filter ON g_filter.id = mg_filter.genre_id';
-        $conditions[] = 'g_filter.name = :genre';
-        $parameters['genre'] = $genreFilter;
-    }
-
-    if ($query !== '') {
-        $conditions[] = 'm.title ILIKE :query';
-        $parameters['query'] = '%' . $query . '%';
-    }
-
-    $sql .= ' WHERE ' . implode(' AND ', $conditions) . ' ORDER BY m.title';
-    $statement = $pdo->prepare($sql);
-    $statement->execute($parameters);
-    $results = $statement->fetchAll();
-
-    $genreNames = [];
-    if ($results !== []) {
-        $movieIds = array_column($results, 'id');
-        $placeholders = implode(',', array_fill(0, count($movieIds), '?'));
-        $genreStatement = $pdo->prepare(
-            "SELECT mg.movie_id, g.name
-             FROM movie_genres mg
-             JOIN genres g ON g.id = mg.genre_id
-             WHERE mg.movie_id IN ($placeholders)
-             ORDER BY g.name"
-        );
-        $genreStatement->execute($movieIds);
-        foreach ($genreStatement->fetchAll() as $row) {
-            $genreNames[(int) $row['movie_id']][] = $row['name'];
-        }
-    }
-} catch (PDOException $exception) {
-    error_log($exception->getMessage());
-    $databaseError = true;
-}
+$movies = require __DIR__ . '/../data/movies.php';
+$query = trim($_GET['q'] ?? '');
+$results = array_filter($movies, static function (array $movie) use ($query): bool {
+    return $query === '' || stripos($movie['title'], $query) !== false;
+});
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,7 +16,6 @@ try {
   <link rel="stylesheet" href="../css/header.css">
   <link rel="stylesheet" href="../css/footer.css">
   <script src="../js/main.js" defer></script>
-  <script src="../js/movies.js" defer></script>
 </head>
 <body>
 <header>
@@ -120,54 +61,28 @@ try {
   <main class="flow-page default-container">
     <section class="movie-search">
       <p class="lbl-p">Search movies</p>
-      <form id="movie-search-form" action="search.php" method="get">
+      <form action="search.php" method="get">
         <label for="search-query">Movie title</label>
-        <input id="search-query" type="search" name="q" value="<?= htmlspecialchars($query, ENT_QUOTES, 'UTF-8') ?>" placeholder="Search by title">
-        <label for="search-genre">Genre</label>
-        <select id="search-genre" name="genre">
-          <option value="">All genres</option>
-          <?php foreach ($genres as $genre): ?>
-            <option value="<?= htmlspecialchars($genre['name'], ENT_QUOTES, 'UTF-8') ?>" <?= $genreFilter === $genre['name'] ? 'selected' : '' ?>>
-              <?= htmlspecialchars($genre['name'], ENT_QUOTES, 'UTF-8') ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-        <label for="search-sort">Sort by</label>
-        <select id="search-sort" name="sort">
-          <option value="title" <?= $sort === 'title' ? 'selected' : '' ?>>Title</option>
-          <option value="year" <?= $sort === 'year' ? 'selected' : '' ?>>Year</option>
-          <option value="duration" <?= $sort === 'duration' ? 'selected' : '' ?>>Duration</option>
-        </select>
-        <label for="search-direction">Order</label>
-        <select id="search-direction" name="direction">
-          <option value="asc" <?= $direction === 'asc' ? 'selected' : '' ?>>Ascending</option>
-          <option value="desc" <?= $direction === 'desc' ? 'selected' : '' ?>>Descending</option>
-        </select>
+        <input id="search-query" type="search" name="q" value="<?= htmlspecialchars($query, ENT_QUOTES, 'UTF-8') ?>" placeholder="Search by title" required>
         <button type="submit">SEARCH</button>
       </form>
     </section>
     <section>
-      <p class="lbl-p">Results</p>
-      <?php if ($databaseError): ?>
-        <p id="search-status" class="search-status" role="status">The movie database is temporarily unavailable.</p>
-        <div id="movie-results" class="movie-results" aria-busy="false"></div>
-      <?php elseif ($results === []): ?>
-        <p id="search-status" class="search-status" role="status">Nothing found</p>
-        <div id="movie-results" class="movie-results" aria-busy="false"></div>
+      <p class="lbl-p">Results<?= $query !== '' ? ' for “' . htmlspecialchars($query, ENT_QUOTES, 'UTF-8') . '”' : '' ?></p>
+      <?php if ($results === []): ?>
+        <p class="empty-state">No movies found. Try another title.</p>
       <?php else: ?>
-        <p id="search-status" class="search-status" role="status"><?= count($results) ?> movies found</p>
-        <div id="movie-results" class="movie-results" aria-busy="false">
-          <?php foreach ($results as $movie): ?>
+        <div class="movie-results">
+          <?php foreach ($results as $id => $movie): ?>
             <article class="movie-card">
-              <a href="movie.php?id=<?= urlencode($movie['slug']) ?>"><img src="../photos/<?= htmlspecialchars($movie['poster'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') ?> poster"></a>
+              <a href="movie.php?id=<?= urlencode($id) ?>"><img src="../photos/<?= htmlspecialchars($movie['image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') ?> poster"></a>
               <h2><?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') ?></h2>
-              <p><?= htmlspecialchars(isset($genreNames[(int) $movie['id']]) ? implode(', ', $genreNames[(int) $movie['id']]) : '', ENT_QUOTES, 'UTF-8') ?> · <?= htmlspecialchars((string) $movie['duration_min'], ENT_QUOTES, 'UTF-8') ?> min<?= $movie['release_year'] ? ' · ' . htmlspecialchars((string) $movie['release_year'], ENT_QUOTES, 'UTF-8') : '' ?></p>
-              <a class="text-button" href="movie.php?id=<?= urlencode($movie['slug']) ?>">VIEW DETAILS</a>
+              <p><?= htmlspecialchars($movie['genre'], ENT_QUOTES, 'UTF-8') ?> · <?= htmlspecialchars($movie['duration'], ENT_QUOTES, 'UTF-8') ?></p>
+              <a class="text-button" href="movie.php?id=<?= urlencode($id) ?>">VIEW DETAILS</a>
             </article>
           <?php endforeach; ?>
         </div>
       <?php endif; ?>
-      <nav id="movie-pagination" class="movie-pagination" aria-label="Movie search pages"></nav>
     </section>
   </main>
  <footer class="footer">

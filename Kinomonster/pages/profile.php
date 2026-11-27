@@ -10,6 +10,7 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
+$movies = require __DIR__ . '/../data/movies.php';
 $userId = (int) $_SESSION['user']['id'];
 $errors = [];
 $user = null;
@@ -78,21 +79,10 @@ try {
     $user = $statement->fetch() ?: null;
 
     $statement = $pdo->prepare(
-        "SELECT b.id, b.status, b.created_at, s.starts_at,
-                m.slug AS movie_slug, m.title AS movie_title,
-                COALESCE(
-                    STRING_AGG(bs.seat_number::text, ', ' ORDER BY bs.seat_number)
-                        FILTER (WHERE bs.is_active),
-                    ''
-                ) AS seats
-         FROM bookings b
-         JOIN showtimes s ON s.id = b.showtime_id
-         JOIN movies m ON m.id = s.movie_id
-         LEFT JOIN booking_seats bs
-           ON bs.booking_id = b.id AND bs.showtime_id = b.showtime_id
-         WHERE b.user_id = :user_id
-         GROUP BY b.id, s.starts_at, m.slug, m.title
-         ORDER BY b.created_at DESC"
+        'SELECT id, movie_id, booking_date, session_time, seats, status
+         FROM bookings
+         WHERE user_id = :user_id
+         ORDER BY created_at DESC'
     );
     $statement->execute(['user_id' => $userId]);
     $bookings = $statement->fetchAll();
@@ -250,12 +240,12 @@ $form = $errors !== [] ? [
                 <tr>
                   <td>#<?= e((string) $booking['id']) ?></td>
                   <td>
-                    <a href="movie.php?id=<?= urlencode($booking['movie_slug']) ?>">
-                      <?= e($booking['movie_title']) ?>
+                    <a href="movie.php?id=<?= urlencode($booking['movie_id']) ?>">
+                      <?= e($movies[$booking['movie_id']]['title'] ?? $booking['movie_id']) ?>
                     </a>
                   </td>
-                  <td><?= e(date('d.m.Y', strtotime($booking['starts_at']))) ?></td>
-                  <td><?= e(date('H:i', strtotime($booking['starts_at']))) ?></td>
+                  <td><?= e(date('d.m.Y', strtotime($booking['booking_date']))) ?></td>
+                  <td><?= e($booking['session_time']) ?></td>
                   <td><?= e($booking['seats']) ?></td>
                   <td><span class="status-badge status-<?= e($booking['status']) ?>"><?= e(ucfirst($booking['status'])) ?></span></td>
                 </tr>

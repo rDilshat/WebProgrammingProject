@@ -1,56 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-require __DIR__ . '/config/movie_helpers.php';
-
-$movies = [];
-$databaseError = false;
-
-try {
-    $pdo = require __DIR__ . '/config/database.php';
-    $statement = $pdo->query(
-        'SELECT id, slug, title, description, duration_min, release_year, poster, trailer_url
-         FROM movies
-         WHERE is_active = TRUE
-         ORDER BY created_at DESC
-         LIMIT 14'
-    );
-    $movies = $statement->fetchAll();
-
-    $genreNames = [];
-    if ($movies !== []) {
-        $movieIds = array_column($movies, 'id');
-        $placeholders = implode(',', array_fill(0, count($movieIds), '?'));
-        $genreStatement = $pdo->prepare(
-            "SELECT mg.movie_id, g.name
-             FROM movie_genres mg
-             JOIN genres g ON g.id = mg.genre_id
-             WHERE mg.movie_id IN ($placeholders)
-             ORDER BY g.name"
-        );
-        $genreStatement->execute($movieIds);
-        foreach ($genreStatement->fetchAll() as $row) {
-            $genreNames[(int) $row['movie_id']][] = $row['name'];
-        }
-    }
-} catch (PDOException $exception) {
-    error_log($exception->getMessage());
-    $databaseError = true;
-}
-
-$heroOrder = ['fight-club', 'joker', 'no-country-for-old-men', 'blade-runner'];
-$moviesBySlug = [];
-foreach ($movies as $movie) {
-    $moviesBySlug[$movie['slug']] = $movie;
-}
-$heroMovies = [];
-foreach ($heroOrder as $slug) {
-    if (isset($moviesBySlug[$slug])) {
-        $heroMovies[] = $moviesBySlug[$slug];
-    }
-}
-$catalogMovies = $movies;
+$movies = require __DIR__ . '/data/movies.php';
+$managedMovies = array_filter($movies, static fn (array $movie): bool => !empty($movie['managed']));
 ?>
 <!DOCTYPE html>
 <html>
@@ -108,51 +59,88 @@ $catalogMovies = $movies;
 </header>
 <main id = "heroSection">
   <section>
-    <?php if ($databaseError): ?>
-      <div class="default-container empty-state">
-        <h1>Movies are temporarily unavailable</h1>
-        <p>The database has not been initialized or is temporarily unavailable.</p>
-      </div>
-    <?php elseif ($heroMovies !== []): ?>
-      <ul class="hero">
-        <?php foreach ($heroMovies as $index => $movie): ?>
-          <?php
-            $heroImages = [
-                'fight-club' => 'fight-club-hero.jpg',
-                'joker' => 'joker.jpg',
-                'no-country-for-old-men' => 'no-country-for-old-men.jpg',
-                'blade-runner' => 'bladerunner.jpg',
-            ];
-            $heroImage = $heroImages[$movie['slug']] ?? $movie['poster'];
-          ?>
-          <li class="<?= $index === 0 ? 'active' : '' ?>">
-            <img class="main-slider-img"
-                 src="photos/<?= htmlspecialchars($heroImage, ENT_QUOTES, 'UTF-8') ?>"
-                 alt="<?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') ?> poster">
-            <div class="default-container">
-              <div class="hero-movie">
-                <p><?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') ?></p>
-                <p><?= htmlspecialchars($movie['description'], ENT_QUOTES, 'UTF-8') ?></p>
-                <div class="hero-actions">
-                  <a class="hero-button" href="pages/movie.php?id=<?= urlencode($movie['slug']) ?>">WATCH NOW</a>
-                  <?php if (movieYouTubeEmbedUrl($movie['trailer_url']) !== null): ?>
-                    <a class="hero-button hero-trailer-button"
-                       href="pages/movie.php?id=<?= urlencode($movie['slug']) ?>#trailer">WATCH TRAILER</a>
-                  <?php endif; ?>
-                </div>
-              </div>
-            </div>
-          </li>
-        <?php endforeach; ?>
-      </ul>
-      <div class="default-container">
-        <div class="next-main-slider-dots">
-          <?php foreach ($heroMovies as $index => $movie): ?>
-            <span class="<?= $index === 0 ? 'active' : '' ?>"></span>
-          <?php endforeach; ?>
+    <ul class="hero">
+      <li class="active">
+        <img
+          class="main-slider-img"
+          src="photos/fight-club-hero.jpg"
+          alt="img"
+        />
+        <div class="default-container">
+          <div class="hero-movie">
+            <p>Fight Club</p>
+            <p>
+              Discontented with his capitalistic lifestyle, a white-collared
+              insomniac forms an underground fight club with Tyler
+            </p>
+            <a class="hero-button" href="pages/movie.php?id=fight-club">WATCH NOW</a>
+          </div>
         </div>
+      </li>
+
+      <li>
+        <img
+          class="main-slider-img"
+          src="photos/joker.jpg"
+          alt="img"
+        />
+        <div class="default-container">
+          <div class="hero-movie">
+            <p>Joker</p>
+            <p>
+              Discontented with his capitalistic lifestyle, a white-collared
+              insomniac forms an underground fight club with Tyler
+            </p>
+            <a class="hero-button" href="pages/movie.php?id=joker">WATCH NOW</a>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <img
+          class="main-slider-img"
+          src="photos/no-country-for-old-men.jpg"
+          alt="img"
+        />
+        <div class="default-container">
+          <div class="hero-movie">
+            <p>No Country For Old Men</p>
+            <p>
+              Discontented with his capitalistic lifestyle, a white-collared
+              insomniac forms an underground fight club with Tyler
+            </p>
+            <a class="hero-button" href="pages/movie.php?id=no-country-for-old-men">WATCH NOW</a>
+          </div>
+        </div>
+      </li>
+
+      <li>
+        <img
+          class="main-slider-img"
+          src="photos/bladerunner.jpg"
+          alt="img"
+        /> <!--Убрал assets-->
+        <div class="default-container">
+          <div class="hero-movie">
+            <p>Blade Runner</p>
+            <p>
+              Discontented with his capitalistic lifestyle, a white-collared
+              insomniac forms an underground fight club with Tyler
+            </p>
+            <a class="hero-button" href="pages/movie.php?id=blade-runner">WATCH NOW</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="default-container">
+      <div class="next-main-slider-dots">
+        <span class="active"></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
-    <?php endif; ?>
+    </div>
 
     <div class="fader-bg">
       <div class="fader-gradient-0"></div>
@@ -169,32 +157,157 @@ $catalogMovies = $movies;
     </form>
   </section>
 
-  <?php if (!$databaseError): ?>
-    <section class="default-container">
-      <p class="lbl-p">Movies</p>
-      <?php if ($catalogMovies === []): ?>
-        <p class="empty-state">Nothing found</p>
-      <?php else: ?>
-        <div class="posters">
-          <?php foreach ($catalogMovies as $movie): ?>
-            <?php $embedUrl = movieYouTubeEmbedUrl($movie['trailer_url']); ?>
-            <article class="poster database-poster">
-              <a href="pages/movie.php?id=<?= urlencode($movie['slug']) ?>">
-                <img src="photos/<?= htmlspecialchars($movie['poster'], ENT_QUOTES, 'UTF-8') ?>"
-                     alt="<?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') ?> poster">
-              </a>
-              <div class="database-poster-info">
-                <h2><?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') ?></h2>
-                <p><?= htmlspecialchars(isset($genreNames[(int) $movie['id']]) ? implode(', ', $genreNames[(int) $movie['id']]) : '', ENT_QUOTES, 'UTF-8') ?></p>
-                <?php if ($embedUrl !== null): ?>
-                  <a class="text-button" href="pages/movie.php?id=<?= urlencode($movie['slug']) ?>#trailer">Watch trailer</a>
-                <?php endif; ?>
-              </div>
-            </article>
-          <?php endforeach; ?>
+  <section class="default-container">
+    <p class="lbl-p">On now</p>
+    <div class="posters-now">
+      <div class="poster-now">
+        <a href="pages/movie.php?id=live-with-kelly"><img src="photos/live-with-kelly_poster.jpg" alt="Live with Kelly and Ryan poster" /></a>
+        <div class="poster-now-lbls">
+          <p>S5 E2</p>
+          <p>Live with Kelly and Ryan</p>
         </div>
-      <?php endif; ?>
-    </section>
+      </div>
+
+      <div class="poster-now">
+        <a href="pages/movie.php?id=big-bang-theory"><img src="photos/bbt_poster.jpg" alt="The Big Bang Theory poster" /></a>
+        <div class="poster-now-lbls">
+          <p>S12 E2</p>
+          <p>The Big Bang Theory</p>
+        </div>
+      </div>
+
+      <div class="poster-now">
+        <a href="pages/movie.php?id=south-park"><img src="photos/s-park_poster.jpg" alt="South Park poster" /></a>
+        <div class="poster-now-lbls">
+          <p>S95 E2</p>
+          <p>South Park</p>
+        </div>
+      </div>
+
+      <div class="poster-now">
+        <a href="pages/movie.php?id=stranger-things"><img
+          src="photos/stranger-things-s-3_poster.jpg"
+          alt="Stranger Things poster"
+        /></a>
+        <div class="poster-now-lbls">
+          <p>S8 E6</p>
+          <p>Stranger Things</p>
+        </div>
+      </div>
+
+      <div class="poster-now">
+        <a href="pages/movie.php?id=fight-club"><img src="photos/fclub_poster.jpg" alt="Fight Club poster" /></a>
+        <div class="poster-now-lbls">
+          <p>MOVIE</p>
+          <p>Fight Club</p>
+        </div>
+      </div>
+
+      <div class="poster-now">
+        <a href="pages/movie.php?id=the-stand"><img src="photos/stands_poster.jpg" alt="The Stand poster" /></a>
+        <div class="poster-now-lbls">
+          <p>S1 E3</p>
+          <p>The Stand</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="default-container">
+    <p class="lbl-p">Popular Shows And Movies</p>
+    <div class="posters">
+      <div class="poster">
+        <a href="pages/movie.php?id=stranger-things"><img src="photos/stranger-things_poster.jpg" alt="Stranger Things poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=friends"><img src="photos/friends_poster.jpg" alt="Friends poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=the-mandalorian"><img src="photos/mand_poster.jpg" alt="The Mandalorian poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=free-guy"><img src="photos/free-guy_poster.jpg" alt="Free Guy poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=joker"
+          ><img src="photos/joker_poster.jpg" alt=""
+        /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=chernobyl"><img src="photos/chernobyl_poster.jpg" alt="Chernobyl poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=space-sweepers"><img src="photos/space-sweepers_poster.jpg" alt="Space Sweepers poster" /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="default-container">
+    <p class="lbl-p">Recently Added Shows</p>
+    <div class="posters">
+      <div class="poster">
+        <a href="pages/movie.php?id=shimmer"><img src="photos/shimmer_poster.jpg" alt="Shimmer poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=bridgerton"><img src="photos/bridgerton_poster.jpg" alt="Bridgerton poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=the-queens-gambit"><img src="photos/queens-gambit_poster.jpg" alt="The Queen's Gambit poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=dark"><img src="photos/dark_poster.jpg" alt="Dark poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=lucifer"><img src="photos/lucifer_poster.jpg" alt="Lucifer poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=shameless"><img src="photos/shameless_poster.jpg" alt="Shameless poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=the-undoing"><img src="photos/the-undoing_poster.jpg" alt="The Undoing poster" /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="default-container">
+    <p class="lbl-p">Recently Added Movies</p>
+    <div class="posters">
+      <div class="poster">
+        <a href="pages/movie.php?id=the-trial-of-chicago-7"><img src="photos/the-trial-of-chicago_poster.jpg" alt="The Trial of the Chicago 7 poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=wolf-of-wall-street"><img src="photos/the-wolf-of-wall-street_poster.jpg" alt="The Wolf of Wall Street poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=wonder-woman-1984"><img src="photos/ww-84_poster.jpg" alt="Wonder Woman 1984 poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=fight-club"><img src="photos/fight-club_poster.jpg" alt="Fight Club poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=harry-potter"><img src="photos/harry-potter_poster.jpg" alt="Harry Potter poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=holidate"><img src="photos/holidate_poster.jpg" alt="Holidate poster" /></a>
+      </div>
+      <div class="poster">
+        <a href="pages/movie.php?id=death-on-the-nile"><img src="photos/death-on-the-nile_poster.jpg" alt="Death on the Nile poster" /></a>
+      </div>
+    </div>
+  </section>
+  <?php if ($managedMovies !== []): ?>
+  <section class="default-container">
+    <p class="lbl-p">Recently Added Movies</p>
+    <div class="posters">
+      <?php foreach ($managedMovies as $movieId => $movie): ?>
+        <div class="poster">
+          <a href="pages/movie.php?id=<?= urlencode($movieId) ?>">
+            <img src="photos/<?= htmlspecialchars($movie['image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') ?> poster">
+          </a>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </section>
   <?php endif; ?>
 </main>
 <footer class="footer">
