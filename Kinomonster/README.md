@@ -57,6 +57,14 @@ UPDATE users SET role = 'admin' WHERE email = 'admin@example.com';
 
 Then log out and log in again — the ADMIN link appears in the menu and `pages/admin.php` opens.
 
+## Movie Search and Management
+
+- `pages/search.php` supports live title search, genre filtering, sorting, and pagination through `api/movies.php`.
+- Administrators also get a **MOVIES ADMIN** link to `admin-movies.php` for creating and editing movies, genres, posters, and YouTube trailers.
+- Edit a movie and use **Manage showtimes** to add future sessions by hall, date/time, and price; those sessions appear on the movie page and enable seat booking.
+- Deactivating a movie hides it from the public catalog without deleting its showtimes or booking history; inactive movies can be restored.
+- These features use the existing `movies`, `genres`, `movie_genres`, `halls`, and `showtimes` tables. No schema migration or seed reload is needed if the database setup above has already been completed.
+
 ## Local password reset
 
 The password reset flow works without an email server during local development:
