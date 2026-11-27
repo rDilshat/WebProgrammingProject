@@ -1,9 +1,21 @@
 <?php
 
-session_start();
-$movies = require __DIR__ . '/../data/movies.php';
+require __DIR__ . '/../config/session.php';
 $booking = $_SESSION['booking'] ?? null;
-$movie = $booking ? ($movies[$booking['movie_id']] ?? null) : null;
+$movie = null;
+
+if ($booking) {
+    try {
+        $pdo = require __DIR__ . '/../config/database.php';
+        $statement = $pdo->prepare(
+            'SELECT title FROM movies WHERE slug = :slug AND is_active = TRUE'
+        );
+        $statement->execute(['slug' => $booking['movie_slug']]);
+        $movie = $statement->fetch();
+    } catch (PDOException $exception) {
+        error_log($exception->getMessage());
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
