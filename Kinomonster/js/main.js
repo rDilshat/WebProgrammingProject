@@ -1,103 +1,83 @@
 const heroSection = document.querySelector("#heroSection");
 
-const authStatusUrl = window.location.pathname.includes("/pages/")
-  ? "auth-status.php"
-  : "pages/auth-status.php";
+const mainScript = document.querySelector('script[src$="js/main.js"]');
 
-function accountLinks(user, inPagesDirectory) {
-  const prefix = inPagesDirectory ? "" : "pages/";
-  const links = [];
+if (mainScript) {
+  const authStatusUrl = new URL("../pages/auth-status.php", mainScript.src);
 
-  links.push({
-    label: "PROFILE",
-    href: `${prefix}profile.php`,
-  });
+  fetch(authStatusUrl, { credentials: "same-origin" })
+    .then((response) => response.ok ? response.json() : Promise.reject())
+    .then((auth) => {
+      document.body.dataset.authenticated = String(auth.authenticated);
 
-  if (user.role === "admin") {
-    links.push({
-      label: "MOVIES ADMIN",
-      href: inPagesDirectory ? "../admin-movies.php" : "admin-movies.php",
+      if (!auth.authenticated) {
+        return;
+      }
+
+      document.querySelectorAll('a[href$="login.html"], a[href$="register.html"]')
+        .forEach((link) => link.closest("li")?.remove());
+
+      document.querySelectorAll(".second-menu, .second-menu-mobile")
+        .forEach((menu) => {
+          addAccountLinks(menu, auth.user);
+
+          const item = document.createElement("li");
+          const logoutLink = document.createElement("a");
+          menu.classList.add("authenticated-menu");
+          item.classList.add("auth-menu-item");
+          logoutLink.href = new URL("../pages/logout.php", mainScript.src);
+          logoutLink.textContent = `LOG OUT (${auth.user.firstName})`;
+          item.append(logoutLink);
+          menu.append(item);
+        });
+
+      document.querySelectorAll('.footer a[href$="login.html"]').forEach((link) => {
+        link.href = new URL("../pages/profile.php", mainScript.src);
+        link.textContent = "Profile";
+      });
+
+      document.querySelectorAll('.footer a[href$="register.html"]').forEach((link) => {
+        link.href = new URL("../pages/logout.php", mainScript.src);
+        link.textContent = "Log Out";
+      });
+    })
+    .catch(() => {
+      document.body.dataset.authenticated = "false";
+    })
+    .finally(() => {
+      document.body.classList.add("auth-status-ready");
     });
-    links.push({
-      label: "ADMIN",
-      href: `${prefix}admin.php`,
+
+  // PROFILE для всех вошедших и ADMIN только для администратора
+  function addAccountLinks(menu, user) {
+    const links = [["PROFILE", "../pages/profile.php"]];
+
+    if (user.role === "admin") {
+      links.push(["ADMIN", "../pages/admin.php"]);
+    }
+
+    links.forEach(([label, path], index) => {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = new URL(path, mainScript.src);
+      link.textContent = label;
+      item.classList.add("auth-menu-link");
+
+      if (index === 0) {
+        item.classList.add("auth-menu-start");
+      }
+
+      // Подсвечиваем текущую страницу, как остальные пункты меню
+      if (link.pathname === window.location.pathname) {
+        link.classList.add("active");
+        link.setAttribute("aria-current", "page");
+      }
+
+      item.append(link);
+      menu.append(item);
     });
   }
-
-  links.push({
-    label: "LOG OUT",
-    href: `${prefix}logout.php`,
-  });
-
-  return links;
 }
-
-function updateAuthMenus(status) {
-  const inPagesDirectory = window.location.pathname.includes("/pages/");
-  const desktopMenus = document.querySelectorAll("ul.second-menu");
-  const mobileMenus = document.querySelectorAll("ul.second-menu-mobile");
-
-  desktopMenus.forEach((menu) => {
-    menu.classList.toggle("authenticated-menu", status.authenticated);
-  });
-
-  [desktopMenus, mobileMenus].forEach((menus) => {
-    menus.forEach((menu) => {
-      const items = Array.from(menu.children);
-
-      if (status.authenticated) {
-        while (items.length > 2) {
-          items.pop().remove();
-        }
-
-        accountLinks(status.user, inPagesDirectory).forEach((link, index) => {
-          const item = document.createElement("li");
-          if (menu.classList.contains("second-menu")) {
-            item.className =
-              index === 0 ? "auth-menu-start auth-menu-item" : "auth-menu-item";
-          }
-          const anchor = document.createElement("a");
-          anchor.href = link.href;
-          anchor.textContent = link.label;
-          item.appendChild(anchor);
-          menu.appendChild(item);
-        });
-      } else {
-        while (items.length > 2) {
-          items.pop().remove();
-        }
-
-        const prefix = inPagesDirectory ? "../" : "";
-        [["LOG IN", `${prefix}login.html`], ["REGISTER", `${prefix}register.html`]]
-          .forEach(([label, href]) => {
-            const item = document.createElement("li");
-            const anchor = document.createElement("a");
-            anchor.href = href;
-            anchor.textContent = label;
-            item.appendChild(anchor);
-            menu.appendChild(item);
-          });
-      }
-    });
-  });
-
-  document.body.classList.add("auth-status-ready");
-}
-
-fetch(authStatusUrl, {
-  headers: { Accept: "application/json" },
-  cache: "no-store",
-})
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error("Unable to load authentication status.");
-    }
-    return response.json();
-  })
-  .then(updateAuthMenus)
-  .catch(() => {
-    document.body.classList.add("auth-status-ready");
-  });
 
 if (heroSection) {
   const slides = heroSection.querySelectorAll(".hero > li");
@@ -135,35 +115,35 @@ if (heroSection) {
     });
   });
 
-  // Затемнение изображения и шапки при прокрутке
-  const checkpoint = 600;
+}
 
-  window.addEventListener("scroll", () => {
-    const currentScroll = window.scrollY;
-    const header = document.querySelector(".header-nav");
+// Фон шапки при прокрутке на всех страницах
+const desktopHeader = document.querySelector(".header-nav");
+const scrollCheckpoint = 600;
 
-    let background = "transparent";
-    let opacity = 1;
+function updateHeaderOnScroll() {
+  if (!desktopHeader) {
+    return;
+  }
 
-    if (currentScroll <= checkpoint) {
-      opacity = 1 - currentScroll / checkpoint;
-    } else {
-      background = "#000";
-      opacity = 0;
-    }
+  const currentScroll = window.scrollY;
 
-    if (header) {
-      header.style.background = background;
-    }
+  if (!heroSection) {
+    desktopHeader.style.background = currentScroll > 0 ? "#000" : "transparent";
+    return;
+  }
 
-    slides.forEach((slide) => {
-      const image = slide.querySelector("img");
+  const opacity = Math.max(0, 1 - currentScroll / scrollCheckpoint);
+  desktopHeader.style.background = currentScroll > scrollCheckpoint ? "#000" : "transparent";
 
-      if (image) {
-        image.style.opacity = String(opacity);
-      }
-    });
+  heroSection.querySelectorAll(".hero > li img").forEach((image) => {
+    image.style.opacity = String(opacity);
   });
+}
+
+if (desktopHeader) {
+  window.addEventListener("scroll", updateHeaderOnScroll);
+  updateHeaderOnScroll();
 }
 
 // Мобильное меню
@@ -180,27 +160,27 @@ if (menuButton && submenu) {
 const bookingForm = document.querySelector(".booking-panel form");
 
 if (bookingForm) {
-  const sessionSelect = bookingForm.querySelector(
-    "select[name='showtime_id'], select[name='session']"
-  );
+  const sessionSelect = bookingForm.querySelector("select[name='session']");
+  const dateInput = bookingForm.querySelector("input[name='date']");
+  const dbBookedSeats = JSON.parse(bookingForm.dataset.bookedDb || "{}");
   const seatLabels = bookingForm.querySelectorAll(".seat-grid label[data-seat]");
+  const loginLink = document.querySelector("a[href$='login.html']");
+  const registerLink = document.querySelector("a[href$='register.html']");
+
+  function isVisible(element) {
+    return element && element.offsetParent !== null;
+  }
 
   function updateSeats() {
-    if (!sessionSelect) {
-      return;
-    }
-
+    const dbKey = `${dateInput.value}|${sessionSelect.value}`;
     const booked = (sessionSelect.selectedOptions[0].dataset.booked || "")
       .split(",")
-      .filter(Boolean);
-    const capacity = Number(
-      sessionSelect.selectedOptions[0].dataset.capacity || 24
-    );
+      .filter(Boolean)
+      .concat((dbBookedSeats[dbKey] || []).map(String));
 
     seatLabels.forEach((label) => {
       const input = label.querySelector("input");
-      const seatNumber = Number(label.dataset.seat);
-      const occupied = seatNumber > capacity || booked.includes(label.dataset.seat);
+      const occupied = booked.includes(label.dataset.seat);
       label.classList.toggle("occupied", occupied);
       input.disabled = occupied;
       if (occupied) {
@@ -209,8 +189,14 @@ if (bookingForm) {
     });
   }
 
-  if (sessionSelect) {
-    sessionSelect.addEventListener("change", updateSeats);
-  }
+  sessionSelect.addEventListener("change", updateSeats);
+  dateInput.addEventListener("change", updateSeats);
   updateSeats();
+
+  bookingForm.addEventListener("submit", (event) => {
+    if (document.body.dataset.authenticated !== "true" || isVisible(loginLink) || isVisible(registerLink)) {
+      event.preventDefault();
+      alert("Please log in or register before booking seats.");
+    }
+  });
 }
